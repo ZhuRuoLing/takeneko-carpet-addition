@@ -18,7 +18,7 @@ public class LanguageProvider {
     @SuppressWarnings("ALL")
     public void init(){
         for (String l : LANGUAGES) {
-            var reader = new InputStreamReader(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("asstes/tnca/lang/" + l + ".json")));
+            var reader = new InputStreamReader(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("assets/tnca/lang/" + l + ".json")));
             HashMap<String, String> langMap = new HashMap<String, String>();
             langMap = GSON.fromJson(reader, langMap.getClass());
             translationMap.put(l, langMap);

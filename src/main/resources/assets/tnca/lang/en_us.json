@@ -1,4 +1,5 @@
 {
-  "carpet.category.TNCA": "TNCA"
+  "carpet.category.TNCA": "TNCA",
+  "carpet.rule.commandKillFakePlayer.desc": "Use regular expressions or string inclusion rules to remove fake players."
 }
 

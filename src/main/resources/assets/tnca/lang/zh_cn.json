@@ -1,3 +1,4 @@
 {
-  "carpet.category.TNCA": "TNCA"
+  "carpet.category.TNCA": "TNCA",
+  "carpet.rule.commandKillFakePlayer.desc": "使用正则表达式或者字符串包含规则移除假人"
 }

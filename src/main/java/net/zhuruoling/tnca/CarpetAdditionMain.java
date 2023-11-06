@@ -8,6 +8,7 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
+import net.zhuruoling.tnca.command.KillFakePlayerCommand;
 import net.zhuruoling.tnca.lang.LanguageProvider;
 import net.zhuruoling.tnca.settings.CarpetAdditionSetting;
 import net.zhuruoling.tnca.settings.SettingCallbacks;
@@ -18,37 +19,56 @@ public class CarpetAdditionMain implements CarpetExtension, ModInitializer {
     @Override
     public void onInitialize() {
         CarpetServer.manageExtension(new CarpetAdditionMain());
-        CarpetServer.settingsManager.parseSettingsClass(CarpetAdditionSetting.class);
+        //#if MC >= 11900
+        //$$SettingsManager.registerGlobalRuleObserver(((src, parsedRule, s) -> {
+        //$$            if (parsedRule.type() != CarpetAdditionSetting.class) return;
+        //$$            onRulesChanged(parsedRule.name(), src);
+        //$$        }));
+        //#else
         SettingsManager.addGlobalRuleObserver(((src, parsedRule, s) -> {
             if (parsedRule.type != CarpetAdditionSetting.class) return;
-            switch (parsedRule.name) {
-                case "commandKillPlayerMPFake" -> SettingCallbacks.KILL_PLAYER_MPFAKE.accept(src);
-
-                default -> {
-
-                }
-            }
-
+            onRulesChanged(parsedRule.name, src);
         }));
+        //#endif
         LanguageProvider.INSTANCE.init();
+        System.out.println("Hello World!");
+    }
+
+    private void onRulesChanged(String name, ServerCommandSource src) {
+        switch (name) {
+            case "commandKillPlayerMPFake" -> SettingCallbacks.KILL_FAKE_PLAYER.accept(src);
+
+            default -> {
+
+            }
+        }
     }
 
     @Override
-    public void onServerLoadedWorlds(MinecraftServer server) {
-        CarpetExtension.super.onServerLoadedWorlds(server);
+    public void onGameStarted() {
+        CarpetServer.settingsManager.parseSettingsClass(CarpetAdditionSetting.class);
+    }
+
+    @Override
+    public void onServerLoaded(MinecraftServer server) {
+        CarpetServer.settingsManager.parseSettingsClass(CarpetAdditionSetting.class);
     }
 
     //#if MC >= 11900
     //$$@Override
     //$$    public void registerCommands(CommandDispatcher<ServerCommandSource> dispatcher, net.minecraft.command.CommandRegistryAccess commandBuildContext) {
-    //$$
+    //$$        this.registerCommand(dispatcher);
     //$$    }
     //#else
     @Override
     public void registerCommands(CommandDispatcher<ServerCommandSource> dispatcher) {
-
+        this.registerCommand(dispatcher);
     }
     //#endif
+
+    private void registerCommand(CommandDispatcher<ServerCommandSource> dispatcher) {
+        KillFakePlayerCommand.register(dispatcher);
+    }
 
     @Override
     public void onServerClosed(MinecraftServer server) {
