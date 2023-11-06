@@ -18,12 +18,11 @@ preprocess {
 
 
 //https://github.com/SkyDynamic/UBB-Carpet-Addition/blob/main/build.gradle
-tasks.register('buildAndGather') {
+tasks.register('buildAll') {
 	subprojects {
 		dependsOn project.name + ':build'
 	}
 	doFirst {
-		println 'Gathering builds'
 		delete fileTree(project.projectDir.toPath().resolve('build/libs')) {
 			include '*'
 		}
@@ -40,3 +39,14 @@ tasks.register('buildAndGather') {
 		}
 	}
 }
+tasks.register('cleanAll') {
+	subprojects {
+		dependsOn project.name + ':clean'
+	}
+
+	doFirst {
+		delete "./build"
+	}
+
+}
+
