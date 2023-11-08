@@ -9,6 +9,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
 import net.zhuruoling.tnca.command.KillFakePlayerCommand;
+import net.zhuruoling.tnca.command.MobSpawnCommand;
 import net.zhuruoling.tnca.lang.LanguageProvider;
 import net.zhuruoling.tnca.settings.CarpetAdditionSetting;
 import net.zhuruoling.tnca.settings.SettingCallbacks;
@@ -36,8 +37,7 @@ public class CarpetAdditionMain implements CarpetExtension, ModInitializer {
 
     private void onRulesChanged(String name, ServerCommandSource src) {
         switch (name) {
-            case "commandKillPlayerMPFake" -> SettingCallbacks.KILL_FAKE_PLAYER.accept(src);
-
+            case "commandKillPlayerMPFake", "commandMobSpawn" -> SettingCallbacks.COMMAND_OPTION_CHANGED.accept(src);
             default -> {
 
             }
@@ -68,6 +68,7 @@ public class CarpetAdditionMain implements CarpetExtension, ModInitializer {
 
     private void registerCommand(CommandDispatcher<ServerCommandSource> dispatcher) {
         KillFakePlayerCommand.register(dispatcher);
+        MobSpawnCommand.register(dispatcher);
     }
 
     @Override

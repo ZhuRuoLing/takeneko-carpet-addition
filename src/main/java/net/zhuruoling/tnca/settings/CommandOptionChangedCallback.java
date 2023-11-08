@@ -2,7 +2,7 @@ package net.zhuruoling.tnca.settings;
 
 import net.minecraft.server.command.ServerCommandSource;
 
-public class KillFakePlayerSettingCallback implements SettingCallback{
+public class CommandOptionChangedCallback implements SettingCallback{
     @Override
     public void accept(ServerCommandSource source) {
         var server = source.getServer();

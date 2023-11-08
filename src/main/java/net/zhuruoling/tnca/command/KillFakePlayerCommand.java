@@ -2,7 +2,6 @@ package net.zhuruoling.tnca.command;
 
 import carpet.CarpetSettings;
 import carpet.patches.EntityPlayerMPFake;
-import carpet.settings.SettingsManager;
 import carpet.utils.Messenger;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;

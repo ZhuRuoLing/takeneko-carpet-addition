@@ -1,5 +1,5 @@
 package net.zhuruoling.tnca.settings;
 
 public class SettingCallbacks {
-    public static SettingCallback KILL_FAKE_PLAYER = new KillFakePlayerSettingCallback();
+    public static SettingCallback COMMAND_OPTION_CHANGED = new CommandOptionChangedCallback();
 }
