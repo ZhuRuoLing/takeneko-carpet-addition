@@ -16,22 +16,16 @@ public class RegexArgumentType implements ArgumentType<Pattern> {
     @Override
     public Pattern parse(StringReader reader) throws CommandSyntaxException {
         try {
-            var s = reader.getRemaining();
+            String s = reader.getRemaining();
             reader.setCursor(reader.getTotalLength());
             return Pattern.compile(s);
         }catch (PatternSyntaxException e){
-            StringBuilder sb = new StringBuilder("Invalid Regex pattern: ");
             int index = e.getIndex();
-            String pattern = e.getPattern();
-            sb.append(e.getDescription());
-            if (index >= 0) {
-                sb.append(" near index ");
-                sb.append(index);
-            }
-            sb.append(": ");
-            sb.append(pattern);
-            sb.append(" <--[HERE]");
-            throw REGEX_SYNTAX_EXCEPTION.create(sb.toString());
+            String errorMessage = String.format("Invalid Regex pattern: %s%s: %s <--[HERE]",
+                    e.getDescription(),
+                    index >= 0 ? String.format(" near index %d ",e.getIndex()) : "",
+                    e.getPattern());
+            throw REGEX_SYNTAX_EXCEPTION.create(errorMessage);
         }
     }
 }

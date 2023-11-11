@@ -11,7 +11,7 @@ import java.util.Objects;
 
 public class LanguageProvider {
     public static final LanguageProvider INSTANCE = new LanguageProvider();
-    public static final String[] LANGUAGES = new String[]{"zh_cn","en_us"};
+    public static final String[] LANGUAGES = new String[] {"zh_cn","en_us"};
     private static final Gson GSON = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
 
     private final HashMap<String, HashMap<String, String>> translationMap = new HashMap<>();

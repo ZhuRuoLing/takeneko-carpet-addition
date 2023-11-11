@@ -65,7 +65,7 @@ public class SpawnRestrictionManager {
     }
 
     public void setCanSpawn(Identifier identifier, boolean canSpawn){
-        if (!contains(identifier))addEmpty(identifier);
+        if (!contains(identifier)) addEmpty(identifier);
         getModification(identifier).setCanSpawn(canSpawn);
     }
 
