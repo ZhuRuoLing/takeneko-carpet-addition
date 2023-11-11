@@ -8,6 +8,7 @@ import net.minecraft.world.SpawnHelper;
 import net.minecraft.world.biome.SpawnSettings;
 import net.minecraft.world.gen.StructureAccessor;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
+import net.zhuruoling.tnca.Util;
 import net.zhuruoling.tnca.settings.CarpetAdditionSetting;
 import net.zhuruoling.tnca.spawn.SpawnRestricionManager;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,7 +23,7 @@ public class SpawnHelperMixin {
             cancellable = true)
     static void mixinCanSpawn(ServerWorld world, SpawnGroup group, StructureAccessor structureAccessor, ChunkGenerator chunkGenerator, SpawnSettings.SpawnEntry spawnEntry, BlockPos.Mutable pos, double squaredDistance, CallbackInfoReturnable<Boolean> cir) {
         if (!CarpetAdditionSetting.commandMobSpawn)return;
-        var entityIdentifier = Registry.ENTITY_TYPE.getId(spawnEntry.type);
+        var entityIdentifier = Util.getIdFromEntityType(spawnEntry.type);
         if (!SpawnRestricionManager.INSTANCE.canSpawn(entityIdentifier)){
             cir.setReturnValue(false);
             cir.cancel();

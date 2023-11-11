@@ -56,19 +56,19 @@ public class CarpetAdditionMain implements CarpetExtension, ModInitializer {
 
     //#if MC >= 11900
     //$$@Override
-    //$$    public void registerCommands(CommandDispatcher<ServerCommandSource> dispatcher, net.minecraft.command.CommandRegistryAccess commandBuildContext) {
-    //$$        this.registerCommand(dispatcher);
+    //$$    public void registerCommands(CommandDispatcher<ServerCommandSource> dispatcher, net.minecraft.command.CommandRegistryAccess access) {
+    //$$        this.registerCommand(dispatcher, access);
     //$$    }
     //#else
     @Override
     public void registerCommands(CommandDispatcher<ServerCommandSource> dispatcher) {
-        this.registerCommand(dispatcher);
+        this.registerCommand(dispatcher, null);
     }
     //#endif
 
-    private void registerCommand(CommandDispatcher<ServerCommandSource> dispatcher) {
+    private void registerCommand(CommandDispatcher<ServerCommandSource> dispatcher, net.minecraft.command.CommandRegistryAccess access) {
         KillFakePlayerCommand.register(dispatcher);
-        MobSpawnCommand.register(dispatcher);
+        MobSpawnCommand.register(dispatcher, access);
     }
 
     @Override

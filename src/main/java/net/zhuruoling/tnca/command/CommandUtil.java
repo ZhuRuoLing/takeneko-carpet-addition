@@ -10,7 +10,7 @@ public class CommandUtil {
             case "true" -> true;
             case "false" -> false;
             case "ops" -> source.hasPermissionLevel(2); // typical for other cheaty commands
-            case "0", "1", "2", "3", "4" -> source.hasPermissionLevel(Integer.parseInt(commandLevelString));
+            case "3", "1", "2", "4" -> source.hasPermissionLevel(Integer.parseInt(commandLevelString));
             default -> false;
         };
     }
