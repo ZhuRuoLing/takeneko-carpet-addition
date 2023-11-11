@@ -21,7 +21,7 @@ import static net.minecraft.server.command.CommandManager.literal;
 public class KillFakePlayerCommand {
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
         dispatcher.register(literal("killFakePlayer").
-                        requires(src -> CommandUtil.canUseCommand(src, CarpetSettings.commandPlayer) && CarpetAdditionSetting.commandKillFakePlayer).then(
+                        requires(src -> CommandUtil.canUseCommand(src, CarpetSettings.commandPlayer) && CommandUtil.canUseCommand(src,CarpetAdditionSetting.commandKillFakePlayer)).then(
                                 literal("contains").
                                         then(argument("string", StringArgumentType.string()).executes(context -> {
                                                     acceptString(context.getSource(), context.getArgument("string", String.class));

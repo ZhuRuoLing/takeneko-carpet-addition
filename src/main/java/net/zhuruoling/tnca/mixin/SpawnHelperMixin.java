@@ -23,7 +23,7 @@ public class SpawnHelperMixin {
             cancellable = true
     )
     private static void mixinCanSpawn(ServerWorld world, SpawnGroup group, StructureAccessor structureAccessor, ChunkGenerator chunkGenerator, SpawnSettings.SpawnEntry spawnEntry, BlockPos.Mutable pos, double squaredDistance, CallbackInfoReturnable<Boolean> cir) {
-        if (!CarpetAdditionSetting.commandMobSpawn)return;
+        if (CarpetAdditionSetting.commandMobSpawn.equals("false"))return;
         var entityIdentifier = Util.getIdFromEntityType(spawnEntry.type);
         if (!SpawnRestrictionManager.INSTANCE.canSpawn(entityIdentifier)){
             cir.setReturnValue(false);

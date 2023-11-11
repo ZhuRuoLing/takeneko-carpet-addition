@@ -26,7 +26,7 @@ public class MobSpawnCommand {
 
 
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess access) {
-        dispatcher.register(literal("mobSpawn").requires(src -> CarpetAdditionSetting.commandMobSpawn && src.hasPermissionLevel(2)).
+        dispatcher.register(literal("mobSpawn").requires(src -> CommandUtil.canUseCommand(src,CarpetAdditionSetting.commandMobSpawn)).
                 then(
                         //#if MC > 11900
                         argument("mobType", net.minecraft.command.argument.RegistryEntryArgumentType.registryEntry(access, net.minecraft.registry.RegistryKeys.ENTITY_TYPE))

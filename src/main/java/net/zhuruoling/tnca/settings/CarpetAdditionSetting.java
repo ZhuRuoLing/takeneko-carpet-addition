@@ -16,8 +16,9 @@ public class CarpetAdditionSetting {
 //$$            desc = "Use regular expressions or string inclusion rules to remove fake players.",
 //$$            category
             //#endif
-                    = {"TNCA", "command"})
-    public static boolean commandKillFakePlayer = false;
+                    = {"TNCA", "command"},
+            options = {"false", "true", "0","1","2","3","4","ops"})
+    public static String commandKillFakePlayer = "ops";
 
     @Rule(
             //#if MC >11900
@@ -26,8 +27,9 @@ public class CarpetAdditionSetting {
 //$$            desc = "Modify mob spawn conditions",
 //$$            category
                     //#endif
-                    = {"TNCA", "command"})
-    public static boolean commandMobSpawn = false;
+                    = {"TNCA", "command"},
+            options = {"false", "true", "0","1","2","3","4","ops"})
+    public static String commandMobSpawn = "ops";
     //spawnFakePlayers Player{range 1..3 }%3{random 1..100}%2
 
 }

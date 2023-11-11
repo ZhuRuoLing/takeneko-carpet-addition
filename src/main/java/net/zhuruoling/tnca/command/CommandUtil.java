@@ -8,9 +8,8 @@ public class CommandUtil {
         String commandLevelString = commandLevel.toString();
         return switch (commandLevelString) {
             case "true" -> true;
-            case "false" -> false;
-            case "ops" -> source.hasPermissionLevel(2); // typical for other cheaty commands
-            case "3", "1", "2", "4" -> source.hasPermissionLevel(Integer.parseInt(commandLevelString));
+            case "ops" -> source.hasPermissionLevel(2);
+            case "3", "1", "2", "4", "0" -> source.hasPermissionLevel(Integer.parseInt(commandLevelString));
             default -> false;
         };
     }
