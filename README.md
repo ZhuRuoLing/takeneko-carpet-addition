@@ -6,8 +6,8 @@
 
 ## commandMobSpawn
 
-Modify mob spawn conditions using `mobSpawn` command.
-
+Modify mob spawn conditions using `mobSpawn` command  
+Seems that it's only working on mobs in SpawnGroup.MONSTER
 - Type: `String`
 
 - Default Value: `ops`
