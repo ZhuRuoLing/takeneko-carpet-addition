@@ -8,7 +8,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
+import net.zhuruoling.tnca.command.arguments.RegexArgumentType;
 import net.zhuruoling.tnca.settings.CarpetAdditionSetting;
 
 import java.util.List;
@@ -21,36 +21,22 @@ import static net.minecraft.server.command.CommandManager.literal;
 public class KillFakePlayerCommand {
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
         dispatcher.register(literal("killFakePlayer").
-                        requires(src -> CommandUtil.canUseCommand(src, CarpetSettings.commandPlayer) && CommandUtil.canUseCommand(src,CarpetAdditionSetting.commandKillFakePlayer)).then(
-                                literal("contains").
-                                        then(argument("string", StringArgumentType.string()).executes(context -> {
-                                                    acceptString(context.getSource(), context.getArgument("string", String.class));
-                                                    return 0;
-                                                })
-                                        )
-                        ).then(
-                                //#if MC > 11940
-                                literal("matches").then(argument("pattern", StringArgumentType.greedyString()).executes(context -> {
-                                            try {
-                                                Pattern pattern = Pattern.compile(context.getArgument("pattern", String.class));
-                                                acceptPattern(context.getSource(), pattern);
-                                            } catch (java.util.regex.PatternSyntaxException e) {
-                                                for (String s : e.getMessage().split(System.lineSeparator())) {
-                                                    Messenger.m(context.getSource(), "r " + s);
-                                                }
-                                            }
+                requires(src -> CommandUtil.canUseCommand(src, CarpetSettings.commandPlayer) && CommandUtil.canUseCommand(src, CarpetAdditionSetting.commandKillFakePlayer)).then(
+                        literal("contains").
+                                then(argument("string", StringArgumentType.string()).executes(context -> {
+                                            acceptString(context.getSource(), context.getArgument("string", String.class));
                                             return 0;
                                         })
                                 )
-                                //#else
-//$$                         literal("matches").
-//$$                                 then(argument("pattern", new net.zhuruoling.tnca.command.arguments.RegexArgumentType()).executes(context -> {
-//$$                                             acceptPattern(context.getSource(), context.getArgument("pattern", Pattern.class));
-//$$                                             return 0;
-//$$                                         })
-//$$                                 )
-                                //#endif
-                        )
+                ).then(
+                        literal("matches").
+                                then(argument("pattern", new RegexArgumentType()).executes(context -> {
+                                            acceptPattern(context.getSource(), context.getArgument("pattern", Pattern.class));
+                                            return 0;
+                                        })
+                                )
+
+                )
         );
     }
 
