@@ -1,6 +1,6 @@
-# TakeNeko Carpet Addition
+# Carpet TakeNeko Addition
 
-##### ~~竹猫卡佩特额滴神~~
+##### Carpet TakeNeko Addition aka. ~~竹猫卡佩特额滴神~~ TNCA
 
 # Rules
 
