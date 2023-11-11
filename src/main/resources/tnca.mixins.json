@@ -3,6 +3,7 @@
   "package": "net.zhuruoling.tnca.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "MinecraftServerMixin",
     "SpawnHelperMixin"
   ],
   "injectors": {

@@ -4,8 +4,8 @@ import net.minecraft.util.Identifier;
 
 public class SpawnRestrictionModification {
 
-    Identifier identifier;
-    boolean canSpawn = true;
+    private Identifier identifier;
+    private boolean canSpawn = true;
 
     public SpawnRestrictionModification(Identifier identifier) {
         this.identifier = identifier;

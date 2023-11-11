@@ -1,4 +1,5 @@
 {
   "carpet.category.TNCA": "TNCA",
-  "carpet.rule.commandKillFakePlayer.desc": "使用正则表达式或者字符串包含规则移除假人"
+  "carpet.rule.commandKillFakePlayer.desc": "使用正则表达式或者字符串包含规则移除假人",
+  "carpet.rule.commandMobSpawn.desc": "修改生物的生成条件"
 }

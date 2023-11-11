@@ -2,7 +2,6 @@ package net.zhuruoling.tnca;
 
 import carpet.CarpetExtension;
 import carpet.CarpetServer;
-import carpet.settings.SettingsManager;
 import com.mojang.brigadier.CommandDispatcher;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
@@ -21,15 +20,15 @@ public class CarpetAdditionMain implements CarpetExtension, ModInitializer {
     public void onInitialize() {
         CarpetServer.manageExtension(new CarpetAdditionMain());
         //#if MC >= 11900
-        //$$SettingsManager.registerGlobalRuleObserver(((src, parsedRule, s) -> {
-        //$$            if (parsedRule.type() != CarpetAdditionSetting.class) return;
-        //$$            onRulesChanged(parsedRule.name(), src);
-        //$$        }));
-        //#else
-        SettingsManager.addGlobalRuleObserver(((src, parsedRule, s) -> {
-            if (parsedRule.type != CarpetAdditionSetting.class) return;
-            onRulesChanged(parsedRule.name, src);
+        carpet.api.settings.SettingsManager.registerGlobalRuleObserver(((src, parsedRule, s) -> {
+            if (parsedRule.type() != CarpetAdditionSetting.class) return;
+            onRulesChanged(parsedRule.name(), src);
         }));
+        //#else
+//$$        carpet.settings.SettingsManager.addGlobalRuleObserver(((src, parsedRule, s) -> {
+//$$            if (parsedRule.type != CarpetAdditionSetting.class) return;
+//$$            onRulesChanged(parsedRule.name, src);
+//$$        }));
         //#endif
         LanguageProvider.INSTANCE.init();
         System.out.println("Hello World!");
@@ -55,15 +54,15 @@ public class CarpetAdditionMain implements CarpetExtension, ModInitializer {
     }
 
     //#if MC >= 11900
-    //$$@Override
-    //$$    public void registerCommands(CommandDispatcher<ServerCommandSource> dispatcher, net.minecraft.command.CommandRegistryAccess access) {
-    //$$        this.registerCommand(dispatcher, access);
-    //$$    }
-    //#else
     @Override
-    public void registerCommands(CommandDispatcher<ServerCommandSource> dispatcher) {
-        this.registerCommand(dispatcher, null);
+    public void registerCommands(CommandDispatcher<ServerCommandSource> dispatcher, net.minecraft.command.CommandRegistryAccess access) {
+        this.registerCommand(dispatcher, access);
     }
+    //#else
+//$$    @Override
+//$$    public void registerCommands(CommandDispatcher<ServerCommandSource> dispatcher) {
+//$$        this.registerCommand(dispatcher, null);
+//$$    }
     //#endif
 
     private void registerCommand(CommandDispatcher<ServerCommandSource> dispatcher, net.minecraft.command.CommandRegistryAccess access) {
