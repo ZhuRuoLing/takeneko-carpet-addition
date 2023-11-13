@@ -5,7 +5,8 @@
   "mixins": [
     "ArgumentTypesMixin",
     "MinecraftServerMixin",
-    "SpawnHelperMixin"
+    "SpawnHelperMixin",
+    "entity.HostileEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

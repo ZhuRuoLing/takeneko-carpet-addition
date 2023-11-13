@@ -5,10 +5,10 @@ import com.google.gson.GsonBuilder;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.WorldSavePath;
+import net.zhuruoling.tnca.util.IntRange;
 
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.lang.reflect.Type;
 import java.util.HashMap;
 
 public class SpawnRestrictionManager {
@@ -49,7 +49,13 @@ public class SpawnRestrictionManager {
                 return;
             }
             var reader = new FileReader(file);
-            map = GSON.fromJson(reader, map.getClass());
+            HashMap<String, SpawnRestrictionModification> map1 = new HashMap<>();
+            map1 = GSON.fromJson(reader, map1.getClass());
+            map.clear();
+            map1.forEach((identifier, spawnRestrictionModification) -> {
+                System.out.printf("%s %s", identifier, spawnRestrictionModification);
+                map.put(new Identifier(identifier), spawnRestrictionModification);
+            });
             reader.close();
         }catch (Exception e){
             throw new RuntimeException(e);
@@ -67,6 +73,17 @@ public class SpawnRestrictionManager {
     public void setCanSpawn(Identifier identifier, boolean canSpawn){
         if (!contains(identifier)) addEmpty(identifier);
         getModification(identifier).setCanSpawn(canSpawn);
+    }
+
+    public IntRange getBrightness(Identifier identifier){
+        var mod = getModification(identifier);
+        if (mod == null)return null;
+        return getModification(identifier).getBrightness();
+    }
+
+    public void setBrightness(Identifier identifier, IntRange range){
+        if (!contains(identifier)) addEmpty(identifier);
+        getModification(identifier).setBrightness(range);
     }
 
     public void clear(Identifier id) {

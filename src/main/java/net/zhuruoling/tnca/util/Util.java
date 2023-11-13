@@ -1,4 +1,4 @@
-package net.zhuruoling.tnca;
+package net.zhuruoling.tnca.util;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.Identifier;

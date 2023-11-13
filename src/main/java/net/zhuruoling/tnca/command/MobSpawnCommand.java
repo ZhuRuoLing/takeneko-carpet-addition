@@ -12,8 +12,11 @@ import net.minecraft.command.suggestion.SuggestionProviders;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.util.Identifier;
+import net.zhuruoling.tnca.command.arguments.IntRangeArgumentType;
 import net.zhuruoling.tnca.settings.CarpetAdditionSetting;
 import net.zhuruoling.tnca.spawn.SpawnRestrictionManager;
+import net.zhuruoling.tnca.spawn.SpawnRestrictionModification;
+import net.zhuruoling.tnca.util.IntRange;
 
 import java.util.function.Supplier;
 
@@ -24,9 +27,11 @@ public class MobSpawnCommand {
     private static final LiteralArgumentBuilder<ServerCommandSource> canSpawn =
             buildMobSpawnRuleCommand("canSpawn", BoolArgumentType::bool, MobSpawnCommand::acceptCanSpawnModification, () -> true);
 
+    private static final LiteralArgumentBuilder<ServerCommandSource> brightness =
+            buildMobSpawnRuleCommand("brightness", IntRangeArgumentType::brightnessRange, MobSpawnCommand::acceptBrightnessModification, () -> new IntRange(0, 15));
 
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess access) {
-        dispatcher.register(literal("mobSpawn").requires(src -> CommandUtil.canUseCommand(src,CarpetAdditionSetting.commandMobSpawn)).
+        dispatcher.register(literal("mobSpawn").requires(src -> CommandUtil.canUseCommand(src, CarpetAdditionSetting.commandMobSpawn)).
                 then(
                         //#if MC > 11900
                         argument("mobType", net.minecraft.command.argument.RegistryEntryArgumentType.registryEntry(access, net.minecraft.registry.RegistryKeys.ENTITY_TYPE))
@@ -46,7 +51,23 @@ public class MobSpawnCommand {
                                     return 0;
                                 }))
                                 .then(canSpawn)
+                                .then(brightness)
                 ));
+    }
+
+    private static int acceptBrightnessModification(ServerCommandSource src, boolean modify, Identifier id, IntRange range) {
+        if (!modify) {
+            if (!SpawnRestrictionManager.INSTANCE.contains(id) || SpawnRestrictionManager.INSTANCE.getBrightness(id) == null) {
+                Messenger.m(src, "y %s has no modified brightness spawn conditions.".formatted(id.toString()));
+                return 1;
+            }
+            var value = SpawnRestrictionManager.INSTANCE.getBrightness(id);
+            Messenger.m(src, "w Set spawn brightness range of mob %s : ".formatted(id.toString()), "l " + value.toString());
+            return 1;
+        }
+        SpawnRestrictionManager.INSTANCE.setBrightness(id, range);
+        Messenger.m(src, "w Set spawn brightness range of mob %s : ".formatted(id.toString()), "l " + range.toString());
+        return 0;
     }
 
     private static int acceptCanSpawnModification(ServerCommandSource src, boolean modify, Identifier mobIdentifier, boolean canSpawn) {
