@@ -15,7 +15,6 @@ import net.minecraft.util.Identifier;
 import net.zhuruoling.tnca.command.arguments.IntRangeArgumentType;
 import net.zhuruoling.tnca.settings.CarpetAdditionSetting;
 import net.zhuruoling.tnca.spawn.SpawnRestrictionManager;
-import net.zhuruoling.tnca.spawn.SpawnRestrictionModification;
 import net.zhuruoling.tnca.util.IntRange;
 
 import java.util.function.Supplier;

@@ -16,11 +16,11 @@ public class SpawnRestrictionManager {
     private final static Gson GSON = new GsonBuilder().registerTypeAdapter(Identifier.class, new Identifier.Serializer()).setPrettyPrinting().serializeNulls().create();
     HashMap<Identifier, SpawnRestrictionModification> map = new HashMap<>();
 
-    public void addEmpty(Identifier identifier){
+    public void addEmpty(Identifier identifier) {
         map.put(identifier, new SpawnRestrictionModification(identifier));
     }
 
-    public boolean contains(Identifier identifier){
+    public boolean contains(Identifier identifier) {
         return map.containsKey(identifier);
     }
 
@@ -30,9 +30,9 @@ public class SpawnRestrictionManager {
             if (file.exists()) file.delete();
             if (!file.exists()) file.createNewFile();
             var writer = new FileWriter(file);
-            GSON.toJson(map,writer);
+            GSON.toJson(new Storage(map), writer);
             writer.close();
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
@@ -40,7 +40,7 @@ public class SpawnRestrictionManager {
     public void load(MinecraftServer server) {
         try {
             var file = server.getSavePath(WorldSavePath.ROOT).resolve("mobSpawn.json").toFile();
-            if (!file.exists()){
+            if (!file.exists()) {
                 file.createNewFile();
                 var writer = new FileWriter(file);
                 writer.write("{}");
@@ -49,33 +49,31 @@ public class SpawnRestrictionManager {
                 return;
             }
             var reader = new FileReader(file);
-            HashMap<String, SpawnRestrictionModification> map1 = new HashMap<>();
-            map1 = GSON.fromJson(reader, map1.getClass());
+            HashMap<Identifier, SpawnRestrictionModification> map1;
+            var storage = GSON.fromJson(reader, Storage.class);
             map.clear();
-            map1.forEach((identifier, spawnRestrictionModification) -> {
-                System.out.printf("%s %s", identifier, spawnRestrictionModification);
-                map.put(new Identifier(identifier), spawnRestrictionModification);
-            });
+            map1 = storage.map();
+            map.putAll(map1);
             reader.close();
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    public SpawnRestrictionModification getModification(Identifier identifier){
+    public SpawnRestrictionModification getModification(Identifier identifier) {
         return map.get(identifier);
     }
 
-    public boolean canSpawn(Identifier identifier){
+    public boolean canSpawn(Identifier identifier) {
         return !contains(identifier) || getModification(identifier).canSpawn();
     }
 
-    public void setCanSpawn(Identifier identifier, boolean canSpawn){
+    public void setCanSpawn(Identifier identifier, boolean canSpawn) {
         if (!contains(identifier)) addEmpty(identifier);
         getModification(identifier).setCanSpawn(canSpawn);
     }
 
-    public IntRange getBrightness(Identifier identifier){
+    public IntRange getBrightness(Identifier identifier) {
         var mod = getModification(identifier);
         if (mod == null)return null;
         return getModification(identifier).getBrightness();
@@ -88,5 +86,9 @@ public class SpawnRestrictionManager {
 
     public void clear(Identifier id) {
         map.remove(id);
+    }
+
+    public static record Storage(HashMap<Identifier, SpawnRestrictionModification> map){
+
     }
 }
