@@ -12,6 +12,7 @@ import net.minecraft.world.ServerWorldAccess;
 import net.zhuruoling.tnca.settings.CarpetAdditionSetting;
 import net.zhuruoling.tnca.spawn.SpawnRestrictionManager;
 import net.zhuruoling.tnca.util.IntRange;
+import net.zhuruoling.tnca.util.SpawnUtil;
 import net.zhuruoling.tnca.util.Util;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -22,22 +23,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class HostileEntityMixin {
     @Inject(method = "canSpawnInDark", at = @At("HEAD"), cancellable = true)
     private static void inj(EntityType<? extends HostileEntity> type, ServerWorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random, CallbackInfoReturnable<Boolean> cir) {
-        if (CarpetAdditionSetting.commandMobSpawn.equals("false"))
-            return;
-        Identifier id = Util.getIdFromEntityType(type);
-        IntRange range = SpawnRestrictionManager.INSTANCE.getBrightness(id);
-        if (!SpawnRestrictionManager.INSTANCE.contains(id) || range == null)
-            return;
-        if (world.getDifficulty() == Difficulty.PEACEFUL)
-            return;
-        if (world.getLightLevel(LightType.SKY, pos) > random.nextInt(32)) {
-            cir.setReturnValue(false);
-            cir.cancel();
-            return;
+        switch (SpawnUtil.checkCanSpawnByBrightness(type, world, spawnReason, pos, random)){
+            case IGNORE -> {
+            }
+            case CAN_SPAWN -> {
+                cir.setReturnValue(true);
+                cir.cancel();
+            }
+            case CANNOT_SPAWN -> {
+                cir.setReturnValue(false);
+                cir.cancel();
+            }
         }
-        int level = world.getLightLevel(LightType.BLOCK, pos);
-        boolean match = level >= range.from() && level <= range.to();
-        cir.setReturnValue(match);
-        cir.cancel();
     }
 }

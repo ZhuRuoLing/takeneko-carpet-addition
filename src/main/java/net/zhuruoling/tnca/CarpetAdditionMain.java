@@ -3,6 +3,7 @@ package net.zhuruoling.tnca;
 import carpet.CarpetExtension;
 import carpet.CarpetServer;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.logging.LogUtils;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.MinecraftServer;
@@ -12,12 +13,17 @@ import net.zhuruoling.tnca.command.MobSpawnCommand;
 import net.zhuruoling.tnca.lang.LanguageProvider;
 import net.zhuruoling.tnca.settings.CarpetAdditionSetting;
 import net.zhuruoling.tnca.settings.SettingCallbacks;
+import org.slf4j.Logger;
 
 import java.util.Map;
 
 public class CarpetAdditionMain implements CarpetExtension, ModInitializer {
+
+    public static final Logger logger = LogUtils.getLogger();
+
     @Override
     public void onInitialize() {
+
         CarpetServer.manageExtension(new CarpetAdditionMain());
         //#if MC >= 11900
         carpet.api.settings.SettingsManager.registerGlobalRuleObserver(((src, parsedRule, s) -> {
@@ -45,11 +51,6 @@ public class CarpetAdditionMain implements CarpetExtension, ModInitializer {
 
     @Override
     public void onGameStarted() {
-        CarpetServer.settingsManager.parseSettingsClass(CarpetAdditionSetting.class);
-    }
-
-    @Override
-    public void onServerLoaded(MinecraftServer server) {
         CarpetServer.settingsManager.parseSettingsClass(CarpetAdditionSetting.class);
     }
 
@@ -88,6 +89,6 @@ public class CarpetAdditionMain implements CarpetExtension, ModInitializer {
 
     @Override
     public Map<String, String> canHasTranslations(String lang) {
-        return LanguageProvider.INSTANCE.canHasTranslations(lang);
+        return LanguageProvider.INSTANCE.getTranslationsForLang(lang);
     }
 }
