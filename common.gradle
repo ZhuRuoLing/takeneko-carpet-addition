@@ -57,7 +57,7 @@ if (mcVersion >= 11800) {
 }
 
 group = project.maven_group
-archivesBaseName = project.archives_base_name + '-mc' + project.minecraft_version
+archivesBaseName = project.archives_base_name + "-v${properties["mod_version"]}-mc${project.minecraft_version}"
 
 processResources {
 	inputs.property "version", version
