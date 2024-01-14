@@ -42,5 +42,6 @@
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "plugin": "net.zhuruoling.tnca.mixin.TNCAMixinPlugin"
 }
