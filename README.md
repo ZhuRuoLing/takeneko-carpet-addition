@@ -42,7 +42,8 @@ Use regular expressions or string inclusion rules to remove fake players.
 
 Bypass order check of chat messages  
 This rule can solve the problem of getting kicked while pasting a litematica into world.  
-This rule only appears on Minecraft >= 1.19
+This rule only appears on Minecraft >= 1.19  
+Add jvm arguments `-DdoNotBypassMessageOrderCheck=true` can invalidate this rule and solve some mixin issue
 
 - Type: `Boolean`
 
