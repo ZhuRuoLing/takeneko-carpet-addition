@@ -1,5 +1,6 @@
 package net.zhuruoling.tnca.util;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.mob.HostileEntity;
@@ -9,6 +10,7 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.LightType;
 import net.minecraft.world.ServerWorldAccess;
+import net.minecraft.world.WorldAccess;
 import net.zhuruoling.tnca.settings.CarpetAdditionSetting;
 import net.zhuruoling.tnca.spawn.SpawnRestrictionManager;
 
@@ -50,20 +52,27 @@ public class SpawnUtil {
         FoxEntity::canSpawn
      */
 
-    public static SpawnCheckResult checkCanSpawnByBrightness(EntityType<? extends HostileEntity> type, ServerWorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random){
+    public static SpawnCheckResult checkCanSpawnByBrightness(EntityType<? extends Entity> type, WorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
         if (CarpetAdditionSetting.commandMobSpawn.equals("false"))
             return SpawnCheckResult.IGNORE;
-        Identifier id = Util.getIdFromEntityType(type);
-        IntRange range = SpawnRestrictionManager.INSTANCE.getBrightness(id);
-        if (!SpawnRestrictionManager.INSTANCE.contains(id) || range == null)
-            return SpawnCheckResult.IGNORE;
-        if (world.getDifficulty() == Difficulty.PEACEFUL)
-            return SpawnCheckResult.IGNORE;
-        if (world.getLightLevel(LightType.SKY, pos) > random.nextInt(32)) {
-            return SpawnCheckResult.CANNOT_SPAWN;
+        if (spawnReason == SpawnReason.SPAWNER
+                || spawnReason == SpawnReason.STRUCTURE
+                || spawnReason == SpawnReason.NATURAL
+                || spawnReason == SpawnReason.PATROL
+                || spawnReason == SpawnReason.TRIGGERED) {
+            Identifier id = Util.getIdFromEntityType(type);
+            IntRange range = SpawnRestrictionManager.INSTANCE.getBrightness(id);
+            if (!SpawnRestrictionManager.INSTANCE.contains(id) || range == null)
+                return SpawnCheckResult.IGNORE;
+            if (world.getDifficulty() == Difficulty.PEACEFUL)
+                return SpawnCheckResult.IGNORE;
+            if (world.getLightLevel(LightType.SKY, pos) > random.nextInt(32)) {
+                return SpawnCheckResult.CANNOT_SPAWN;
+            }
+            int level = world.getLightLevel(LightType.BLOCK, pos);
+            boolean match = level >= range.from() && level <= range.to();
+            return match ? SpawnCheckResult.CAN_SPAWN : SpawnCheckResult.CANNOT_SPAWN;
         }
-        int level = world.getLightLevel(LightType.BLOCK, pos);
-        boolean match = level >= range.from() && level <= range.to();
-        return match ? SpawnCheckResult.CAN_SPAWN : SpawnCheckResult.CANNOT_SPAWN;
+        return SpawnCheckResult.IGNORE;
     }
 }

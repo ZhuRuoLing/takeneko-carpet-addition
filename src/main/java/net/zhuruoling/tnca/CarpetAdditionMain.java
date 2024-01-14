@@ -54,6 +54,7 @@ public class CarpetAdditionMain implements CarpetExtension, ModInitializer {
         CarpetServer.settingsManager.parseSettingsClass(CarpetAdditionSetting.class);
     }
 
+
     //#if MC >= 11900
     @Override
     public void registerCommands(CommandDispatcher<ServerCommandSource> dispatcher, net.minecraft.command.CommandRegistryAccess access) {

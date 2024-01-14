@@ -4,6 +4,7 @@
 	"version": "${version}",
 	"name": "TakeNeko Carpet Addition",
 	"description": "carpet addition for minecraft",
+	"accessWidener": "tnca.accesswidener",
 	"authors": [
 		"ZhuRuoLing",
 		"MSDNicrosoft"

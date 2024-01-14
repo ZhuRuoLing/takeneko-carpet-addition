@@ -1,5 +1,5 @@
 package net.zhuruoling.tnca.settings;
-//#if MC >11900
+//#if MC >=11900
 import carpet.api.settings.Rule;
 //#else
 //$$import carpet.settings.Rule;
@@ -10,7 +10,7 @@ import carpet.api.settings.Rule;
 public class CarpetAdditionSetting {
 
     @Rule(
-            //#if MC >11900
+            //#if MC >=11900
             categories
             //#else
 //$$            desc = "Use regular expressions or string inclusion rules to remove fake players.",
@@ -21,7 +21,7 @@ public class CarpetAdditionSetting {
     public static String commandKillFakePlayer = "ops";
 
     @Rule(
-            //#if MC >11900
+            //#if MC >=11900
             categories
             //#else
 //$$            desc = "Modify mob spawn conditions",
@@ -32,4 +32,12 @@ public class CarpetAdditionSetting {
     public static String commandMobSpawn = "ops";
     //spawnFakePlayers Player{range 1..3 }%3{random 1..100}%2
 
+    //#if MC >=11900
+    @Rule(
+
+            categories
+                    = {"TNCA"}
+    )
+    public static boolean bypassMessageOrderCheck = false;
+    //#endif
 }

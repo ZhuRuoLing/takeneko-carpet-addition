@@ -34,7 +34,6 @@ public class MobSpawnCommand {
                 then(
                         //#if MC > 11900
                         argument("mobType", net.minecraft.command.argument.RegistryEntryArgumentType.registryEntry(access, net.minecraft.registry.RegistryKeys.ENTITY_TYPE))
-
                                 //#else
                                 //$$ argument("mobType", net.minecraft.command.argument.EntitySummonArgumentType.entitySummon())
                                 //#endif

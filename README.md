@@ -20,7 +20,7 @@ Use with carpet mod in the same Minecraft version. Use newer carpet mod versions
 ### commandMobSpawn
 
 Modify mob spawn conditions using `mobSpawn` command  
-Seems that it's only working on mobs in SpawnGroup.MONSTER
+Hope it works
 - Type: `String`
 
 - Default Value: `ops`
@@ -37,3 +37,15 @@ Use regular expressions or string inclusion rules to remove fake players.
 - Default Value: `ops`
 
 - Categories: `TNCA` , `commands`
+
+### bypassMessageOrderCheck
+
+Bypass order check of chat messages  
+This rule can solve the problem of getting kicked while pasting a litematica into world.  
+This rule only appears on Minecraft >= 1.19
+
+- Type: `Boolean`
+
+- Default Value: `false`
+
+- Categories: `TNCA`
