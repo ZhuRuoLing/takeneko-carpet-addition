@@ -1,5 +1,9 @@
 package net.zhuruoling.tnca.util;
 
+import net.minecraft.predicate.NumberRange;
+
+import java.util.Objects;
+
 public class IntRange {
     int from;
     int to;
@@ -33,11 +37,15 @@ public class IntRange {
         return from > this.from && this.to < to;
     }
 
+    public static IntRange convert(NumberRange.IntRange range){
+        return new IntRange(
+                Objects.isNull(range.getMin()) ? Integer.MIN_VALUE : range.getMin(),
+                Objects.isNull(range.getMax()) ? Integer.MAX_VALUE : range.getMax()
+        );
+    }
+
     @Override
     public String toString() {
-        return "{" +
-                "from: " + from +
-                " , to: " + to +
-                '}';
+        return "[%d, %d]".formatted(from, to);
     }
 }

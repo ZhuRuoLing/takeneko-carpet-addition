@@ -84,6 +84,17 @@ public class SpawnRestrictionManager {
         getModification(identifier).setBrightness(range);
     }
 
+    public void setHeight(Identifier identifier, IntRange range){
+        if (!contains(identifier)) addEmpty(identifier);
+        getModification(identifier).setHeight(range);
+    }
+
+    public IntRange getHeight(Identifier identifier) {
+        var mod = getModification(identifier);
+        if (mod == null)return null;
+        return getModification(identifier).getHeight();
+    }
+
     public void clear(Identifier id) {
         map.remove(id);
     }

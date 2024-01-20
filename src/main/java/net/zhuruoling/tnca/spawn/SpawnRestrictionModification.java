@@ -7,8 +7,8 @@ public class SpawnRestrictionModification {
 
     private Identifier identifier;
     private boolean canSpawn = true;
-
     private IntRange brightness = null;
+    private IntRange height = null;
 
     public SpawnRestrictionModification(Identifier identifier) {
         this.identifier = identifier;
@@ -28,6 +28,14 @@ public class SpawnRestrictionModification {
 
     public void setBrightness(IntRange brightness) {
         this.brightness = brightness;
+    }
+
+    public IntRange getHeight() {
+        return height;
+    }
+
+    public void setHeight(IntRange height) {
+        this.height = height;
     }
 
     @Override

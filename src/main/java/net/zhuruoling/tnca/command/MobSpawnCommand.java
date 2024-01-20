@@ -8,14 +8,16 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.datafixers.util.Function4;
 import net.minecraft.command.CommandRegistryAccess;
+import net.minecraft.command.argument.NumberRangeArgumentType;
 import net.minecraft.command.suggestion.SuggestionProviders;
+import net.minecraft.predicate.NumberRange;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.util.Identifier;
-import net.zhuruoling.tnca.command.arguments.IntRangeArgumentType;
 import net.zhuruoling.tnca.settings.CarpetAdditionSetting;
 import net.zhuruoling.tnca.spawn.SpawnRestrictionManager;
 import net.zhuruoling.tnca.util.IntRange;
+import net.zhuruoling.tnca.util.SpawnCheckResult;
 
 import java.util.function.Supplier;
 
@@ -27,7 +29,10 @@ public class MobSpawnCommand {
             buildMobSpawnRuleCommand("canSpawn", BoolArgumentType::bool, MobSpawnCommand::acceptCanSpawnModification, () -> true);
 
     private static final LiteralArgumentBuilder<ServerCommandSource> brightness =
-            buildMobSpawnRuleCommand("brightness", IntRangeArgumentType::brightnessRange, MobSpawnCommand::acceptBrightnessModification, () -> new IntRange(0, 15));
+            buildMobSpawnRuleCommand("brightness", NumberRangeArgumentType::intRange, MobSpawnCommand::acceptBrightnessModification, () -> NumberRange.IntRange.between(0, 15));
+
+    private static final LiteralArgumentBuilder<ServerCommandSource> height =
+            buildMobSpawnRuleCommand("height", NumberRangeArgumentType::intRange, MobSpawnCommand::acceptHeightModification, () -> NumberRange.IntRange.between(Integer.MIN_VALUE, Integer.MAX_VALUE));
 
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess access) {
         dispatcher.register(literal("mobSpawn").requires(src -> CommandUtil.canUseCommand(src, CarpetAdditionSetting.commandMobSpawn)).
@@ -47,13 +52,46 @@ public class MobSpawnCommand {
                                     SpawnRestrictionManager.INSTANCE.clear(id);
                                     Messenger.m(src.getSource(), "w Removed all modified spawn conditions of %s.".formatted(id.toString()));
                                     return 0;
-                                }))
+                                })).
+                                then(literal("log")
+                                        .then(literal("add").executes(context -> acceptLogMobSpawn(context.getSource(), getEntityArgument(context), true)))
+                                        .then(literal("remove").executes(context -> acceptLogMobSpawn(context.getSource(), getEntityArgument(context), false)))
+                                )
                                 .then(canSpawn)
                                 .then(brightness)
+                                .then(height)
                 ));
     }
 
-    private static int acceptBrightnessModification(ServerCommandSource src, boolean modify, Identifier id, IntRange range) {
+    private static int acceptLogMobSpawn(ServerCommandSource src, Identifier id, boolean add) {
+        if (add) {
+            if (SpawnRestrictionManager.INSTANCE.addSpawnLog(src, id)) {
+
+            }
+        } else {
+            if (SpawnRestrictionManager.INSTANCE.removeSpawnLog(src, id)) {
+
+            }
+        }
+        return 0;
+    }
+
+    private static int acceptHeightModification(ServerCommandSource src, boolean modify, Identifier id, NumberRange.IntRange range) {
+        if (!modify) {
+            if (!SpawnRestrictionManager.INSTANCE.contains(id) || SpawnRestrictionManager.INSTANCE.getHeight(id) == null) {
+                Messenger.m(src, "y %s has no modified height spawn conditions.".formatted(id.toString()));
+                return 1;
+            }
+            var value = SpawnRestrictionManager.INSTANCE.getHeight(id);
+            Messenger.m(src, "w Set spawn height range of mob %s : ".formatted(id.toString()), "l " + value.toString());
+            return 1;
+        }
+        SpawnRestrictionManager.INSTANCE.setHeight(id, IntRange.convert(range));
+        Messenger.m(src, "w Set spawn height range of mob %s : ".formatted(id.toString()), "l " + formatNumberRange(range));
+        return 0;
+    }
+
+    private static int acceptBrightnessModification(ServerCommandSource src, boolean modify, Identifier id, NumberRange.IntRange range) {
         if (!modify) {
             if (!SpawnRestrictionManager.INSTANCE.contains(id) || SpawnRestrictionManager.INSTANCE.getBrightness(id) == null) {
                 Messenger.m(src, "y %s has no modified brightness spawn conditions.".formatted(id.toString()));
@@ -63,8 +101,8 @@ public class MobSpawnCommand {
             Messenger.m(src, "w Set spawn brightness range of mob %s : ".formatted(id.toString()), "l " + value.toString());
             return 1;
         }
-        SpawnRestrictionManager.INSTANCE.setBrightness(id, range);
-        Messenger.m(src, "w Set spawn brightness range of mob %s : ".formatted(id.toString()), "l " + range.toString());
+        SpawnRestrictionManager.INSTANCE.setBrightness(id, IntRange.convert(range));
+        Messenger.m(src, "w Set spawn brightness range of mob %s : ".formatted(id.toString()), "l " + formatNumberRange(range));
         return 0;
     }
 
@@ -127,6 +165,10 @@ public class MobSpawnCommand {
                         })
                 )
         );
+    }
+
+    private static String formatNumberRange(NumberRange.IntRange range) {
+        return "[%d, %d]".formatted(range.getMin(), range.getMax());
     }
 
 

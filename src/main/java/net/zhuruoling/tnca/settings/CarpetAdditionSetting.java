@@ -33,11 +33,9 @@ public class CarpetAdditionSetting {
     //spawnFakePlayers Player{range 1..3 }%3{random 1..100}%2
 
     //#if MC >=11900
-    @Rule(
-
-            categories
-                    = {"TNCA"}
-    )
+    @Rule(categories = {"TNCA","fix"})
     public static boolean bypassMessageOrderCheck = false;
     //#endif
+
+
 }
