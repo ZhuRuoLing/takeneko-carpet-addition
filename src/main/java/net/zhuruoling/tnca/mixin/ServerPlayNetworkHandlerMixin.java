@@ -2,17 +2,16 @@ package net.zhuruoling.tnca.mixin;
 
 
 import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.loader.impl.launch.FabricLauncher;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.zhuruoling.tnca.settings.CarpetAdditionSetting;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 import java.time.Instant;
-import java.util.Objects;
 
 @Mixin(ServerPlayNetworkHandler.class)
 public abstract class ServerPlayNetworkHandlerMixin {

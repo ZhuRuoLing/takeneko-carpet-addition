@@ -6,7 +6,7 @@ import net.minecraft.entity.mob.WaterCreatureEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.WorldAccess;
-import net.zhuruoling.tnca.util.SpawnUtil;
+import net.zhuruoling.tnca.spawn.SpawnUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

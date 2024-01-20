@@ -17,8 +17,8 @@ import net.minecraft.util.Identifier;
 import net.zhuruoling.tnca.settings.CarpetAdditionSetting;
 import net.zhuruoling.tnca.spawn.SpawnRestrictionManager;
 import net.zhuruoling.tnca.util.IntRange;
-import net.zhuruoling.tnca.util.SpawnCheckResult;
 
+import java.util.Objects;
 import java.util.function.Supplier;
 
 import static net.minecraft.server.command.CommandManager.argument;
@@ -66,11 +66,15 @@ public class MobSpawnCommand {
     private static int acceptLogMobSpawn(ServerCommandSource src, Identifier id, boolean add) {
         if (add) {
             if (SpawnRestrictionManager.INSTANCE.addSpawnLog(src, id)) {
-
+                Messenger.m(src, "l Added ", "w %s to spawnLog.".formatted(id));
+            } else {
+                Messenger.m(src, "y Entity %s is not in spawnLog.".formatted(id));
             }
         } else {
             if (SpawnRestrictionManager.INSTANCE.removeSpawnLog(src, id)) {
-
+                Messenger.m(src, "r Removed ", "w %s from spawnLog.".formatted(id));
+            } else {
+                Messenger.m(src, "y Entity %s is not in spawnLog.".formatted(id));
             }
         }
         return 0;
@@ -168,7 +172,10 @@ public class MobSpawnCommand {
     }
 
     private static String formatNumberRange(NumberRange.IntRange range) {
-        return "[%d, %d]".formatted(range.getMin(), range.getMax());
+        return "[%d, %d]".formatted(
+                Objects.isNull(range.getMin()) ? Integer.MIN_VALUE : range.getMin(),
+                Objects.isNull(range.getMax()) ? Integer.MAX_VALUE : range.getMax()
+        );
     }
 
 

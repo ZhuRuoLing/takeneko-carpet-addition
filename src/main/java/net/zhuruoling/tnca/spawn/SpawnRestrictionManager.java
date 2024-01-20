@@ -10,12 +10,14 @@ import net.zhuruoling.tnca.util.IntRange;
 
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.util.HashMap;
+import java.util.*;
 
 public class SpawnRestrictionManager {
     public final static SpawnRestrictionManager INSTANCE = new SpawnRestrictionManager();
     private final static Gson GSON = new GsonBuilder().registerTypeAdapter(Identifier.class, new Identifier.Serializer()).setPrettyPrinting().serializeNulls().create();
     HashMap<Identifier, SpawnRestrictionModification> map = new HashMap<>();
+
+    Set<Identifier> logEntities = new HashSet<>();
 
     public void addEmpty(Identifier identifier) {
         map.put(identifier, new SpawnRestrictionModification(identifier));
@@ -31,7 +33,7 @@ public class SpawnRestrictionManager {
             if (file.exists()) file.delete();
             if (!file.exists()) file.createNewFile();
             var writer = new FileWriter(file);
-            GSON.toJson(new Storage(map), writer);
+            GSON.toJson(new Storage(logEntities, map), writer);
             writer.close();
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -50,11 +52,13 @@ public class SpawnRestrictionManager {
                 return;
             }
             var reader = new FileReader(file);
-            HashMap<Identifier, SpawnRestrictionModification> map1;
             var storage = GSON.fromJson(reader, Storage.class);
             map.clear();
-            map1 = storage.map();
-            map.putAll(map1);
+            map.putAll(storage.map());
+            if (storage.logEntities != null) {
+                logEntities.clear();
+                logEntities.addAll(storage.logEntities());
+            }
             reader.close();
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -100,15 +104,19 @@ public class SpawnRestrictionManager {
         map.remove(id);
     }
 
+    public boolean logs(Identifier id){
+        return logEntities.contains(id);
+    }
+
     public boolean addSpawnLog(ServerCommandSource src, Identifier id) {
-        return false;
+        return logEntities.add(id);
     }
 
     public boolean removeSpawnLog(ServerCommandSource src, Identifier id) {
-        return false;
+        return logEntities.remove(id);
     }
 
-    public static record Storage(HashMap<Identifier, SpawnRestrictionModification> map){
+    public static record Storage(Set<Identifier> logEntities, HashMap<Identifier, SpawnRestrictionModification> map){
 
     }
 }

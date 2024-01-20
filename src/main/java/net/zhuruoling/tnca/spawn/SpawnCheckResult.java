@@ -1,4 +1,4 @@
-package net.zhuruoling.tnca.util;
+package net.zhuruoling.tnca.spawn;
 
 public enum SpawnCheckResult {
     IGNORE, CAN_SPAWN, CANNOT_SPAWN

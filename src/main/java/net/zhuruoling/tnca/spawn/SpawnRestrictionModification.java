@@ -5,7 +5,7 @@ import net.zhuruoling.tnca.util.IntRange;
 
 public class SpawnRestrictionModification {
 
-    private Identifier identifier;
+    private final Identifier identifier;
     private boolean canSpawn = true;
     private IntRange brightness = null;
     private IntRange height = null;

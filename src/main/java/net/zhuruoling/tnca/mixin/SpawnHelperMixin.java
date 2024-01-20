@@ -9,6 +9,7 @@ import net.minecraft.world.gen.StructureAccessor;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
 import net.zhuruoling.tnca.settings.CarpetAdditionSetting;
 import net.zhuruoling.tnca.spawn.SpawnRestrictionManager;
+import net.zhuruoling.tnca.spawn.SpawnUtil;
 import net.zhuruoling.tnca.util.Util;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -19,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class SpawnHelperMixin {
     @Inject(
             method = "canSpawn(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/SpawnGroup;Lnet/minecraft/world/gen/StructureAccessor;Lnet/minecraft/world/gen/chunk/ChunkGenerator;Lnet/minecraft/world/biome/SpawnSettings$SpawnEntry;Lnet/minecraft/util/math/BlockPos$Mutable;D)Z",
-            at = @At("HEAD"),
+            at = @At("RETURN"),
             cancellable = true
     )
     private static void mixinCanSpawn(ServerWorld world, SpawnGroup group, StructureAccessor structureAccessor, ChunkGenerator chunkGenerator, SpawnSettings.SpawnEntry spawnEntry, BlockPos.Mutable pos, double squaredDistance, CallbackInfoReturnable<Boolean> cir) {
@@ -28,7 +29,7 @@ public class SpawnHelperMixin {
         if (!SpawnRestrictionManager.INSTANCE.canSpawn(entityIdentifier)){
             cir.setReturnValue(false);
             cir.cancel();
-            return;
         }
+        SpawnUtil.logCanSpawn(cir.getReturnValue(), group, entityIdentifier, pos, world, world.getServer());
     }
 }

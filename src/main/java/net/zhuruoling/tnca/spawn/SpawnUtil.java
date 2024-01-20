@@ -1,82 +1,30 @@
-package net.zhuruoling.tnca.util;
+package net.zhuruoling.tnca.spawn;
 
+import carpet.utils.Messenger;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.SpawnReason;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
+import net.minecraft.text.Texts;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.LightType;
-import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.zhuruoling.tnca.settings.CarpetAdditionSetting;
-import net.zhuruoling.tnca.spawn.SpawnRestrictionManager;
-import net.zhuruoling.tnca.spawn.SpawnRestrictionModification;
+import net.zhuruoling.tnca.util.IntRange;
+import net.zhuruoling.tnca.util.Util;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SpawnUtil {
-
-    /* TOO MUCH MIXIN
-        AxolotlEntity::canSpawn
-        WaterCreatureEntity::canSpawn
-        DrownedEntity::canSpawn
-        GuardianEntity::canSpawn
-        TropicalFishEntity::canTropicalFishSpawn
-        BatEntity::canSpawn
-        HostileEntity::canSpawnIgnoreLightLevel
-        HostileEntity::canSpawnInDark
-        AnimalEntity::isValidNaturalSpawn
-        EndermiteEntity::canSpawn
-        MobEntity::canMobSpawn
-        FrogEntity::canSpawn
-        GhastEntity::canSpawn
-        GlowSquidEntity::canSpawn
-        GoatEntity::canSpawn
-        HuskEntity::canSpawn
-        MagmaCubeEntity::canMagmaCubeSpawn
-        MooshroomEntity::canSpawn
-        OcelotEntity::canSpawn
-        ParrotEntity::canSpawn
-        HoglinEntity::canSpawn
-        PiglinEntity::canSpawn
-        PatrolEntity::canSpawn
-        PolarBearEntity::canSpawn
-        RabbitEntity::canSpawn
-        SilverfishEntity::canSpawn
-        SlimeEntity::canSpawn
-        StrayEntity::canSpawn
-        StriderEntity::canSpawn
-        TurtleEntity::canSpawn
-        WolfEntity::canSpawn
-        ZombifiedPiglinEntity::canSpawn
-        FoxEntity::canSpawn
-     */
-
-    /*
-    public enum SpawnReason {
-*	NATURAL,
-*	CHUNK_GENERATION,
-*	SPAWNER,
-*	STRUCTURE,
-	BREEDING,
-	MOB_SUMMONED,
-	JOCKEY,
-	EVENT,
-	CONVERSION,
-	REINFORCEMENT,
-	TRIGGERED,
-	BUCKET,
-	SPAWN_EGG,
-	COMMAND,
-	DISPENSER,
-	PATROL;
-}
-
-     */
 
     public static SpawnCheckResult checkCanSpawnIgnoreLight(EntityType<? extends Entity> type, WorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
         if (CarpetAdditionSetting.commandMobSpawn.equals("false"))
@@ -133,7 +81,7 @@ public class SpawnUtil {
     private static SpawnCheckResult checkCanSpawnByHeight(BlockPos pos, Identifier id) {
         IntRange range = SpawnRestrictionManager.INSTANCE.getHeight(id);
         if (range == null) return SpawnCheckResult.IGNORE;
-        return range.from <= pos.getY() && range.to >= pos.getY() ? SpawnCheckResult.CAN_SPAWN : SpawnCheckResult.CANNOT_SPAWN;
+        return range.from() <= pos.getY() && range.to() >= pos.getY() ? SpawnCheckResult.CAN_SPAWN : SpawnCheckResult.CANNOT_SPAWN;
     }
 
     @NotNull
@@ -150,4 +98,12 @@ public class SpawnUtil {
         boolean match = level >= range.from() && level <= range.to();
         return match ? SpawnCheckResult.CAN_SPAWN : SpawnCheckResult.CANNOT_SPAWN;
     }
+
+    public static void logCanSpawn(boolean returnValue, SpawnGroup group, Identifier entityIdentifier, BlockPos.Mutable pos, ServerWorld world, MinecraftServer server) {
+        if (!SpawnRestrictionManager.INSTANCE.logs(entityIdentifier))return;
+        for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
+            Messenger.m(player,Util.getEntityDisplayName(entityIdentifier) , "w  ", "w in spawn group ", "c " + group.asString() + " ", returnValue ? "l Allowed " : "r Disallowed ", "w spawn at ", Util.formatClickablePosition(pos), "w  " , "w in dimension " , "l " + Util.getWorldIdFromServerWorld(world).toString());
+        }
+    }
+
 }
