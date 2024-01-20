@@ -3,6 +3,7 @@ package net.zhuruoling.tnca.spawn;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.WorldSavePath;
 import net.zhuruoling.tnca.util.IntRange;
@@ -97,6 +98,14 @@ public class SpawnRestrictionManager {
 
     public void clear(Identifier id) {
         map.remove(id);
+    }
+
+    public boolean addSpawnLog(ServerCommandSource src, Identifier id) {
+        return false;
+    }
+
+    public boolean removeSpawnLog(ServerCommandSource src, Identifier id) {
+        return false;
     }
 
     public static record Storage(HashMap<Identifier, SpawnRestrictionModification> map){
