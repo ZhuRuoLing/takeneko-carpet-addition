@@ -16,7 +16,7 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"net.zhuruoling.tnca.CarpetAdditionMain"
+          "icu.takeneko.tnca.CarpetAdditionMain"
 		]
 	},
 	"mixins": [
