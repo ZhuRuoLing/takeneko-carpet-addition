@@ -13,35 +13,42 @@ public class IntRange {
         this.to = to;
     }
 
-    public int from(){
+    public int from() {
         return from;
     }
 
-    public int to(){
+    public int to() {
         return to;
     }
 
-    public boolean withinInclusive(IntRange range){
+    public boolean withinInclusive(IntRange range) {
         return range.from >= this.from && this.to <= range.to;
     }
 
-    public boolean withinExclusive(IntRange range){
+    public boolean withinExclusive(IntRange range) {
         return range.from > this.from && this.to < range.to;
     }
 
-    public boolean withinInclusive(int from, int to){
+    public boolean withinInclusive(int from, int to) {
         return from >= this.from && this.to <= to;
     }
 
-    public boolean withinExclusive(int from, int to){
+    public boolean withinExclusive(int from, int to) {
         return from > this.from && this.to < to;
     }
 
-    public static IntRange convert(NumberRange.IntRange range){
+    public static IntRange convert(NumberRange.IntRange range) {
+        //#if MC < 12004
+        //$$        return new IntRange(
+        //$$          Objects.isNull(range.getMin()) ? Integer.MIN_VALUE : range.getMin(),
+        //$$          Objects.isNull(range.getMax()) ? Integer.MAX_VALUE : range.getMax()
+        //$$  );
+        //#else
         return new IntRange(
-                Objects.isNull(range.getMin()) ? Integer.MIN_VALUE : range.getMin(),
-                Objects.isNull(range.getMax()) ? Integer.MAX_VALUE : range.getMax()
+                range.min().isPresent() ? Integer.MIN_VALUE : range.min().get(),
+                range.max().isPresent() ? Integer.MAX_VALUE : range.max().get()
         );
+        //#endif
     }
 
     @Override

@@ -21,8 +21,8 @@ public class TNCAMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        if (Objects.equals(mixinClassName, "net.zhuruoling.tnca.mixin.ServerPlayNetworkHandlerMixin")){
-            return !Boolean.parseBoolean(System.getenv("doNotBypassMessageOrderCheck"));
+        if (Objects.equals(mixinClassName, "icu.takeneko.tnca.mixin.ServerPlayNetworkHandlerMixin")){
+            return !Boolean.getBoolean("doNotBypassMessageOrderCheck");
         }
         return true;
     }

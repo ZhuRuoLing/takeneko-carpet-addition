@@ -173,8 +173,13 @@ public class MobSpawnCommand {
 
     private static String formatNumberRange(NumberRange.IntRange range) {
         return "[%d, %d]".formatted(
-                Objects.isNull(range.getMin()) ? Integer.MIN_VALUE : range.getMin(),
-                Objects.isNull(range.getMax()) ? Integer.MAX_VALUE : range.getMax()
+                //#if MC <= 12004
+//$$                Objects.isNull(range.getMin()) ? Integer.MIN_VALUE : range.getMin(),
+//$$                Objects.isNull(range.getMax()) ? Integer.MAX_VALUE : range.getMax()
+                //#else
+                range.min().isPresent() ? Integer.MIN_VALUE : range.min().get(),
+                range.max().isPresent() ? Integer.MAX_VALUE : range.max().get()
+                //#endif
         );
     }
 
