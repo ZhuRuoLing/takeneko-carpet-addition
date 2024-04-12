@@ -32,19 +32,10 @@ public class KillFakePlayerCommand {
                                 )
                 ).then(
                         literal("matches").
-                                then(argument("pattern", StringArgumentType.greedyString())
-                                        .suggests(new RegexSuggestionProvider<>())
+                                then(argument("pattern", new RegexArgumentType())
+                                        //.suggests(new RegexSuggestionProvider<>())
                                         .executes(context -> {
-                                            try {
-                                                acceptPattern(context.getSource(), Pattern.compile(context.getArgument("pattern", String.class)));
-                                            }catch (PatternSyntaxException e){
-                                                int index = e.getIndex();
-                                                String errorMessage = String.format("w Invalid Regex pattern: %s%s: %s <--[HERE]",
-                                                        e.getDescription(),
-                                                        index >= 0 ? String.format(" near index %d ",e.getIndex()) : "",
-                                                        e.getPattern());
-                                                context.getSource().sendError(Messenger.s(errorMessage));
-                                            }
+                                                acceptPattern(context.getSource(), context.getArgument("pattern", Pattern.class));
                                             //acceptPattern(context.getSource(), Pattern.compile(context.getArgument("pattern", String.class)));
                                             return 0;
                                         })

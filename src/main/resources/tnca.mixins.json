@@ -40,6 +40,9 @@
     "entity.WolfEntityMixin_canSpawn",
     "entity.ZombifiedPiglinEntityMixin_canSpawn"
   ],
+  "server": [
+
+  ],
   "injectors": {
     "defaultRequire": 1
   },

@@ -2,6 +2,8 @@ package icu.takeneko.tnca.mixin;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 import icu.takeneko.tnca.command.arguments.RegexArgumentType;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.command.argument.ArgumentTypes;
 import net.minecraft.command.argument.serialize.ArgumentSerializer;
 import net.minecraft.command.argument.serialize.ConstantArgumentSerializer;
@@ -20,10 +22,22 @@ public abstract class ArgumentTypesMixin {
         return null;
     }
 
+    @Environment(EnvType.SERVER)
     @Inject(method = "register(Lnet/minecraft/registry/Registry;)Lnet/minecraft/command/argument/serialize/ArgumentSerializer;", at = @At("HEAD"))
-    private static void register(Registry<ArgumentSerializer<?, ?>> registry, CallbackInfoReturnable<ArgumentSerializer<?, ?>> cir){
+    private static void register(Registry<ArgumentSerializer<?, ?>> registry, CallbackInfoReturnable<ArgumentSerializer<?, ?>> cir) {
         register(registry, "regex", RegexArgumentType.class, ConstantArgumentSerializer.of(RegexArgumentType::new));
         //register(registry, "brightness", IntRangeArgumentType.class, ConstantArgumentSerializer.of(IntRangeArgumentType::brightnessRange));
     }
+
+
+    @Environment(EnvType.CLIENT)
+    @Inject(method = "get", at = @At("HEAD"), cancellable = true)
+    private static <A extends ArgumentType<?>> void handleGet(A argumentType, CallbackInfoReturnable<ArgumentSerializer<A, ?>> cir) {
+        if (argumentType instanceof RegexArgumentType){
+            cir.setReturnValue((ArgumentSerializer<A, ?>) ConstantArgumentSerializer.of(RegexArgumentType::new));
+            cir.cancel();
+        }
+    }
+
     //#endif
 }
