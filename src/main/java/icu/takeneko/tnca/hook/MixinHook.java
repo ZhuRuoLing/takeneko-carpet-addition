@@ -24,9 +24,11 @@ public class MixinHook {
 
     public static List<String> fixMixinClasses(String mixinPackage, List<String> mixinClasses){
         if (mixinClasses == null)return null;
-        if (mixinPackage.startsWith("icu.takeneko.tnca")){
-            mixinClasses.removeAll(mixinClasses.stream().filter(it -> MIXIN_1_16_5_IGNORE.stream().anyMatch(it::endsWith)).toList());
-        }
+        //#if MC < 11800
+//$$        if (mixinPackage.startsWith("icu.takeneko.tnca")){
+//$$            mixinClasses.removeAll(mixinClasses.stream().filter(it -> MIXIN_1_16_5_IGNORE.stream().anyMatch(it::endsWith)).toList());
+//$$        }
+        //#endif
         return mixinClasses;
     }
 }

@@ -7,7 +7,7 @@ public class CommandCompat {
     public static ArgumentType<Identifier> getEntityArgumentType(){
         //#if MC >= 11800
             //#if MC > 11900
-            //$$ return null
+            //$$ return null;
             //#else
             //$$ return net.minecraft.command.argument.EntitySummonArgumentType.entitySummon();
             //#endif
