@@ -69,6 +69,7 @@ processResources {
 				"version": project.mod_version,
 				"carpet_dependency": project.carpet_dependency,
 				"minecraft_dependency": project.minecraft_dependency,
+				"minecraft_version_id": project.minecraft_version.replace(".","_")
 		]
 		expand valueMap
 	}

@@ -41,3 +41,5 @@ for (String version : versions) {
     proj.buildFileName = "../../common.gradle"
 }
 
+include 'all'
+

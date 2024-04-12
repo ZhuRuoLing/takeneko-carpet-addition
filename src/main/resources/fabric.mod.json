@@ -1,6 +1,6 @@
 {
 	"schemaVersion": 1,
-	"id": "carpet-takeneko-addition",
+	"id": "carpet-takeneko-addition-${minecraft_version_id}",
 	"version": "${version}",
 	"name": "TakeNeko Carpet Addition",
 	"description": "carpet addition for minecraft",

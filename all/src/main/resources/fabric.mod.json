@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "carpet-takeneko-addition",
+  "version": "${version}",
+  "name": "TakeNeko Carpet Addition",
+  "description": "carpet addition for minecraft",
+  "authors": [
+    "ZhuRuoLing",
+    "MSDNicrosoft"
+  ],
+  "contact": {
+    "sources": "https://github.com/ZhuRuoLing/takeneko-carpet-addition"
+  },
+  "license": "MIT",
+  "icon": "assets/tnca/icon.png",
+  "environment": "*",
+  "depends": {
+    "minecraft": [
+      "1.18.x",
+      "1.19.2",
+      "1.19.3",
+      "1.19.4",
+      "1.20.1",
+      "1.20.4"
+    ],
+    "carpet": "${carpet_dependency}"
+  }
+}

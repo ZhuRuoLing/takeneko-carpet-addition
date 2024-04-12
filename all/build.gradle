@@ -1,0 +1,86 @@
+// https://github.com/Hendrix-Shen/MagicLib/blob/dev/0.7/fabricWrapper/build.gradle
+import groovy.json.JsonBuilder
+import groovy.json.JsonSlurper
+
+plugins {
+    id("java-library")
+    id("maven-publish")
+    id("signing")
+}
+
+group(project.maven_group)
+version(project.mod_version)
+
+base {
+    archivesName.set("${project.archives_base_name}-all")
+}
+
+def fabric_subprojects = project.parent.subprojects.findAll({
+    it.name != "all"
+})
+
+fabric_subprojects.collect {
+    evaluationDependsOn(":${it.name}")
+}
+
+jar {
+    // disable cache
+    outputs.upToDateWhen { false }
+
+    dependsOn(fabric_subprojects.collect {
+        it.tasks.remapJar
+    })
+
+    doFirst {
+        delete fileTree("build/tmp/submods/META-INF/jars")
+
+        copy {
+            from {
+                fabric_subprojects.collect {
+                    it.remapJar.outputs.files
+                }
+            }
+
+            into("build/tmp/submods/META-INF/jars")
+        }
+    }
+
+    from("../LICENSE")
+    from("build/tmp/submods")
+}
+
+processResources {
+    // disable cache
+    outputs.upToDateWhen { false }
+
+    from("${rootDir}/icon.png") {
+        into("assets/${project.mod_id}")
+    }
+
+    filesMatching("fabric.mod.json") {
+        expand([
+                "version": project.version,
+                "carpet_dependency": project.carpet_dependency
+        ])
+    }
+
+    doLast {
+        ArrayList<?> mc_condition = []
+        ArrayList<?> jars = []
+
+        fabric_subprojects.each({
+            mc_condition.add("${it.minecraft_dependency}")
+            jars.add(["file": "META-INF/jars/${project.archives_base_name}-v${project.mod_version}-mc${it.minecraft_version}.jar"])
+        })
+
+        File file = file("build/resources/main/fabric.mod.json")
+        JsonSlurper slurper = new JsonSlurper()
+        JsonBuilder builder = new JsonBuilder(slurper.parse(file))
+        builder.content.depends.minecraft = mc_condition
+        builder.content.jars = jars
+        BufferedWriter writer = file.newWriter()
+        writer.append(builder.toPrettyString())
+        writer.flush()
+        writer.close()
+    }
+}
