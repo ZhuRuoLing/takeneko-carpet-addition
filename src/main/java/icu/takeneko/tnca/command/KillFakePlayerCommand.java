@@ -10,10 +10,12 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import icu.takeneko.tnca.settings.CarpetAdditionSetting;
+import net.minecraft.text.Text;
 
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
@@ -30,8 +32,20 @@ public class KillFakePlayerCommand {
                                 )
                 ).then(
                         literal("matches").
-                                then(argument("pattern", new RegexArgumentType()).executes(context -> {
-                                            acceptPattern(context.getSource(), context.getArgument("pattern", Pattern.class));
+                                then(argument("pattern", StringArgumentType.greedyString())
+                                        .suggests(new RegexSuggestionProvider<>())
+                                        .executes(context -> {
+                                            try {
+                                                acceptPattern(context.getSource(), Pattern.compile(context.getArgument("pattern", String.class)));
+                                            }catch (PatternSyntaxException e){
+                                                int index = e.getIndex();
+                                                String errorMessage = String.format("w Invalid Regex pattern: %s%s: %s <--[HERE]",
+                                                        e.getDescription(),
+                                                        index >= 0 ? String.format(" near index %d ",e.getIndex()) : "",
+                                                        e.getPattern());
+                                                context.getSource().sendError(Messenger.s(errorMessage));
+                                            }
+                                            //acceptPattern(context.getSource(), Pattern.compile(context.getArgument("pattern", String.class)));
                                             return 0;
                                         })
                                 )
