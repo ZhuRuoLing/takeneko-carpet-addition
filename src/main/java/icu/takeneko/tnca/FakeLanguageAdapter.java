@@ -53,9 +53,11 @@ public class FakeLanguageAdapter implements LanguageAdapter {
                 );
             } catch (Exception ignored) {
             }
-            defineClass(MixinService.class.getClassLoader(), "icu.takeneko.tnca.hook.patch.MixinConfigClassPatch");
+            defineClass(MixinService.class.getClassLoader(), "icu.takeneko.tnca.hook.patch.ClassPatch");
             defineClass(MixinService.class.getClassLoader(), "icu.takeneko.tnca.hook.MixinHook");
             defineClass(MixinService.class.getClassLoader(), "icu.takeneko.tnca.hook.ClassPatcher");
+            defineClass(MixinService.class.getClassLoader(), "icu.takeneko.tnca.hook.patch.MixinConfigClassPatch");
+
             ClassPatcher.init();
             ClassPatcher.reTransformClass(Class.forName("org.spongepowered.asm.mixin.transformer.MixinConfig"));
         }catch (Throwable e){
