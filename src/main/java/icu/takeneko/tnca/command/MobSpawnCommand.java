@@ -12,27 +12,27 @@ import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.NumberRangeArgumentType;
 import net.minecraft.command.suggestion.SuggestionProviders;
 import net.minecraft.predicate.NumberRange;
-import net.minecraft.registry.entry.RegistryEntry;
+//import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.util.Identifier;
 import icu.takeneko.tnca.settings.CarpetAdditionSetting;
 import icu.takeneko.tnca.util.IntRange;
 
-import java.util.Objects;
 import java.util.function.Supplier;
 
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
 
 public class MobSpawnCommand {
+
     private static final LiteralArgumentBuilder<ServerCommandSource> canSpawn =
             buildMobSpawnRuleCommand("canSpawn", BoolArgumentType::bool, MobSpawnCommand::acceptCanSpawnModification, () -> true);
 
     private static final LiteralArgumentBuilder<ServerCommandSource> brightness =
-            buildMobSpawnRuleCommand("brightness", NumberRangeArgumentType::intRange, MobSpawnCommand::acceptBrightnessModification, () -> NumberRange.IntRange.between(0, 15));
+            buildMobSpawnRuleCommand("brightness", NumberRangeArgumentType::intRange, MobSpawnCommand::acceptBrightnessModification, () -> NumberRange.IntRange.atLeast(0));
 
     private static final LiteralArgumentBuilder<ServerCommandSource> height =
-            buildMobSpawnRuleCommand("height", NumberRangeArgumentType::intRange, MobSpawnCommand::acceptHeightModification, () -> NumberRange.IntRange.between(Integer.MIN_VALUE, Integer.MAX_VALUE));
+            buildMobSpawnRuleCommand("height", NumberRangeArgumentType::intRange, MobSpawnCommand::acceptHeightModification, () -> NumberRange.IntRange.atLeast(Integer.MIN_VALUE));
 
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess access) {
         dispatcher.register(literal("mobSpawn").requires(src -> CommandUtil.canUseCommand(src, CarpetAdditionSetting.commandMobSpawn)).
@@ -40,7 +40,7 @@ public class MobSpawnCommand {
                         //#if MC > 11900
                         argument("mobType", net.minecraft.command.argument.RegistryEntryArgumentType.registryEntry(access, net.minecraft.registry.RegistryKeys.ENTITY_TYPE))
                                 //#else
-                                //$$ argument("mobType", net.minecraft.command.argument.EntitySummonArgumentType.entitySummon())
+                                //$$ argument("mobType", icu.takeneko.tnca.compat.command.CommandCompat.getEntityArgumentType())
                                 //#endif
                                 .suggests(SuggestionProviders.SUMMONABLE_ENTITIES)
                                 .then(literal("reset").executes(src -> {
@@ -138,7 +138,7 @@ public class MobSpawnCommand {
         //#if MC < 11900
         //$$ return context.getArgument("mobType", Identifier.class);
         //#else
-        return context.getArgument("mobType", RegistryEntry.Reference.class).registryKey().getValue();
+        return context.getArgument("mobType", net.minecraft.registry.entry.RegistryEntry.Reference.class).registryKey().getValue();
         //#endif
     }
 
@@ -174,8 +174,8 @@ public class MobSpawnCommand {
     private static String formatNumberRange(NumberRange.IntRange range) {
         return "[%d, %d]".formatted(
                 //#if MC <= 12004
-//$$                Objects.isNull(range.getMin()) ? Integer.MIN_VALUE : range.getMin(),
-//$$                Objects.isNull(range.getMax()) ? Integer.MAX_VALUE : range.getMax()
+//$$                range.getMin() == null ? Integer.MIN_VALUE : range.getMin(),
+//$$                range.getMax() == null ? Integer.MAX_VALUE : range.getMax()
                 //#else
                 range.min().isPresent() ? Integer.MIN_VALUE : range.min().get(),
                 range.max().isPresent() ? Integer.MAX_VALUE : range.max().get()

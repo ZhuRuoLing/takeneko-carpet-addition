@@ -19,6 +19,9 @@
           "icu.takeneko.tnca.CarpetAdditionMain"
 		]
 	},
+	"languageAdapters": {
+		"tnca:wtf1165": "icu.takeneko.tnca.FakeLanguageAdapter"
+	},
 	"mixins": [
 		"tnca.mixins.json"
 	],

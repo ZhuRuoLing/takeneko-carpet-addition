@@ -4,11 +4,20 @@ import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
 public class TNCAMixinPlugin implements IMixinConfigPlugin {
+
+    private final static List<String> MIXIN_1_16_5_IGNORE = List.of("FrogEntityMixin_canSpawn",
+            "GlowSquidEntityMixin_canSpawn",
+            "GoatEntityMixin_canSpawn",
+            "WaterCreatureEntityMixin_canSpawn",
+            "WolfEntityMixin_canSpawn",
+            "AxolotlEntityMixin_canSpawn");
+
     @Override
     public void onLoad(String mixinPackage) {
 
@@ -23,6 +32,13 @@ public class TNCAMixinPlugin implements IMixinConfigPlugin {
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
         if (Objects.equals(mixinClassName, "icu.takeneko.tnca.mixin.ServerPlayNetworkHandlerMixin")){
             return !Boolean.getBoolean("doNotBypassMessageOrderCheck");
+        }
+        if (MIXIN_1_16_5_IGNORE.stream().anyMatch(it -> mixinClassName.endsWith(it))){
+            //#if MC < 11800
+            //$$ return false;
+            //#else
+            return true;
+            //#endif
         }
         return true;
     }

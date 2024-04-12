@@ -1,13 +1,11 @@
 package icu.takeneko.tnca.util;
 
-import carpet.utils.Messenger;
 import net.minecraft.entity.EntityType;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.*;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 
 public class Util {
     public static Identifier getIdFromEntityType(EntityType<?> entityType) {

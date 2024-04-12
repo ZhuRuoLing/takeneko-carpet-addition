@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(TropicalFishEntity.class)
 public class TropicalFishEntityMixin_canTropicalFishSpawn {
+    //#if MC > 11800
     @Inject(method = "canTropicalFishSpawn", at = @At("RETURN"), cancellable = true)
     private static void inj(EntityType<TropicalFishEntity> type, WorldAccess world, SpawnReason reason, BlockPos pos, Random random, CallbackInfoReturnable<Boolean> cir) {
         switch (SpawnUtil.checkCanSpawn(type, world, reason, pos, random)){
@@ -29,4 +30,5 @@ public class TropicalFishEntityMixin_canTropicalFishSpawn {
             }
         }
     }
+    //#endif
 }

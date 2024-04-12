@@ -1,5 +1,5 @@
 package icu.takeneko.tnca.mixin.entity;
-
+//#if MC>=11800
 import icu.takeneko.tnca.spawn.SpawnUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -15,6 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(AxolotlEntity.class)
 public class AxolotlEntityMixin_canSpawn {
+
     @Inject(method = "canSpawn(Lnet/minecraft/entity/EntityType;Lnet/minecraft/world/ServerWorldAccess;Lnet/minecraft/entity/SpawnReason;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/random/Random;)Z", at = @At("RETURN"), cancellable = true)
     private static void inj(EntityType<? extends Entity> type, ServerWorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random, CallbackInfoReturnable<Boolean> cir) {
         switch (SpawnUtil.checkCanSpawn(type, world, spawnReason, pos, random)){
@@ -30,4 +31,6 @@ public class AxolotlEntityMixin_canSpawn {
             }
         }
     }
+
 }
+//#endif

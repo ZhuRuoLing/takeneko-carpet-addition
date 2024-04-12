@@ -3,9 +3,10 @@ package icu.takeneko.tnca;
 import carpet.CarpetExtension;
 import carpet.CarpetServer;
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.logging.LogUtils;
 import icu.takeneko.tnca.command.KillFakePlayerCommand;
 import icu.takeneko.tnca.command.MobSpawnCommand;
+import icu.takeneko.tnca.compat.log.Log;
+import icu.takeneko.tnca.compat.log.SimpleLogService;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.MinecraftServer;
@@ -13,17 +14,15 @@ import net.minecraft.server.command.ServerCommandSource;
 import icu.takeneko.tnca.lang.LanguageProvider;
 import icu.takeneko.tnca.settings.CarpetAdditionSetting;
 import icu.takeneko.tnca.settings.SettingCallbacks;
-import org.slf4j.Logger;
 
 import java.util.Map;
 
 public class CarpetAdditionMain implements CarpetExtension, ModInitializer {
 
-    public static final Logger logger = LogUtils.getLogger();
+    public static final SimpleLogService logger = Log.getLogService();
 
     @Override
     public void onInitialize() {
-
         CarpetServer.manageExtension(new CarpetAdditionMain());
         //#if MC >= 11900
         carpet.api.settings.SettingsManager.registerGlobalRuleObserver(((src, parsedRule, s) -> {
@@ -37,12 +36,12 @@ public class CarpetAdditionMain implements CarpetExtension, ModInitializer {
 //$$        }));
         //#endif
         LanguageProvider.INSTANCE.init();
-        System.out.println("Hello World!");
+        logger.info("[TNCA] Hello World!");
     }
 
     private void onRulesChanged(String name, ServerCommandSource src, String value) {
         switch (name) {
-            case "commandKillPlayerMPFake", "commandMobSpawn" -> SettingCallbacks.COMMAND_OPTION_CHANGED.accept(src);
+            case "commandKillFakePlayer", "commandMobSpawn" -> SettingCallbacks.COMMAND_OPTION_CHANGED.accept(src);
             case "commandHelp" -> {
                 boolean enable = Boolean.parseBoolean(value);
                 if (enable){

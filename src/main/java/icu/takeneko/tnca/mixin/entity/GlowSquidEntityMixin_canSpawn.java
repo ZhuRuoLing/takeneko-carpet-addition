@@ -1,5 +1,5 @@
 package icu.takeneko.tnca.mixin.entity;
-
+//#if MC >= 11800
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
 
 @Mixin(GlowSquidEntity.class)
 public class GlowSquidEntityMixin_canSpawn {
@@ -31,3 +32,4 @@ public class GlowSquidEntityMixin_canSpawn {
         }
     }
 }
+//#endif

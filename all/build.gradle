@@ -28,7 +28,7 @@ jar {
     outputs.upToDateWhen { false }
 
     dependsOn(fabric_subprojects.collect {
-        it.tasks.remapJar
+        it.tasks.remapShadowJar
     })
 
     doFirst {
@@ -37,7 +37,7 @@ jar {
         copy {
             from {
                 fabric_subprojects.collect {
-                    it.remapJar.outputs.files
+                    it.remapShadowJar.outputs.files
                 }
             }
 

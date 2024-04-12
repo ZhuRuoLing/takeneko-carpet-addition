@@ -1,5 +1,5 @@
 package icu.takeneko.tnca.mixin.entity;
-
+//#if MC >= 11800
 import icu.takeneko.tnca.spawn.SpawnUtil;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
@@ -31,3 +31,4 @@ public class GoatEntityMixin_canSpawn {
         }
     }
 }
+//#endif

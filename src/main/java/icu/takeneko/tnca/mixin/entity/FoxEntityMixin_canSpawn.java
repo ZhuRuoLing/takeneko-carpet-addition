@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(FoxEntity.class)
 public class FoxEntityMixin_canSpawn {
+    //#if MC >= 11800
     @Inject(method = "canSpawn", at = @At("RETURN"), cancellable = true)
     private static void inj(EntityType<FoxEntity> type, WorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random, CallbackInfoReturnable<Boolean> cir) {
         switch (SpawnUtil.checkCanSpawn(type, world, spawnReason, pos, random)){
@@ -29,4 +30,5 @@ public class FoxEntityMixin_canSpawn {
             }
         }
     }
+    //#endif
 }

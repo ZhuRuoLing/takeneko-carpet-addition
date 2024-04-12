@@ -1,6 +1,7 @@
 apply plugin: 'maven-publish'
 apply plugin: 'fabric-loom'
 apply plugin: 'com.replaymod.preprocess'
+apply plugin: "com.github.johnrengelman.shadow"
 
 int mcVersion = 1
 
@@ -25,8 +26,11 @@ repositories {
 	}
 }
 
+
 configurations {
 	modRuntimeOnly.exclude group: 'net.fabricmc', module: 'fabric-loader'
+	api.extendsFrom includeApi
+	shadowInclude
 }
 
 dependencies {
@@ -37,6 +41,8 @@ dependencies {
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	// modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+	shadowInclude implementation("net.bytebuddy:byte-buddy-agent:1.14.0")
 }
 
 loom {
@@ -46,6 +52,27 @@ loom {
 		vmArgs '-Dmixin.debug.export=true'
 	}
 }
+
+shadowJar {
+	archiveClassifier = "all-dev"
+	configurations = [project.configurations.shadowInclude]
+	minimize()
+	from("LICENSE") {
+		rename { "${it}_${project.archivesBaseName}" }
+	}
+	exclude "/kotlin*"
+	relocate "net.bytebuddy", "icu.takeneko.deps.bytebuddy"
+}
+
+task("remapShadowJar", type: net.fabricmc.loom.task.RemapJarTask, dependsOn: shadowJar) {
+	remapperIsolation = true
+	input = shadowJar.archiveFile
+	archiveFileName = shadowJar.archiveFileName.get().replaceAll("-dev\\.jar\$", ".jar")
+	addNestedDependencies = true
+}
+
+
+
 
 remapJar {
 	remapperIsolation = true

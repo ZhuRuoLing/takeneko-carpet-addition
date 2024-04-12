@@ -1,4 +1,5 @@
 package icu.takeneko.tnca.mixin.entity;
+//#if MC > 11800
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
@@ -16,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class WolfEntityMixin_canSpawn {
     @Inject(method = "canSpawn", at = @At("RETURN"), cancellable = true)
     private static void inj(EntityType<WolfEntity> type, WorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random, CallbackInfoReturnable<Boolean> cir) {
-        switch (SpawnUtil.checkCanSpawn(type, world, spawnReason, pos, random)){
+        switch (SpawnUtil.checkCanSpawn(type, world, spawnReason, pos, random)) {
             case IGNORE -> {
             }
             case CAN_SPAWN -> {
@@ -30,3 +31,4 @@ public class WolfEntityMixin_canSpawn {
         }
     }
 }
+//#endif

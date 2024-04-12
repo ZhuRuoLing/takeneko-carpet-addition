@@ -9,12 +9,10 @@
     "SpawnHelperMixin",
     "entity.HostileEntityMixin_canSpawnInDark",
     "entity.AnimalEntityMixin_isValidNaturalSpawn",
-    "entity.AxolotlEntityMixin_canSpawn",
     "entity.BatEntityMixin_canSpawn",
     "entity.DrownedEntityMixin_canSpawn",
     "entity.EndermiteEntityMixin_canSpawn",
     "entity.FoxEntityMixin_canSpawn",
-    "entity.FrogEntityMixin_canSpawn",
     "entity.GhastEntityMixin_canSpawn",
     "entity.GlowSquidEntityMixin_canSpawn",
     "entity.GoatEntityMixin_canSpawn",
@@ -36,9 +34,13 @@
     "entity.StriderEntityMixin_canSpawn",
     "entity.TropicalFishEntityMixin_canTropicalFishSpawn",
     "entity.TurtleEntityMixin_canSpawn",
+    "entity.ZombifiedPiglinEntityMixin_canSpawn",
+    "entity.FrogEntityMixin_canSpawn",
+    "entity.GlowSquidEntityMixin_canSpawn",
+    "entity.GoatEntityMixin_canSpawn",
     "entity.WaterCreatureEntityMixin_canSpawn",
     "entity.WolfEntityMixin_canSpawn",
-    "entity.ZombifiedPiglinEntityMixin_canSpawn"
+    "entity.AxolotlEntityMixin_canSpawn"
   ],
   "server": [
 
