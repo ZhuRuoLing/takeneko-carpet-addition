@@ -3,10 +3,12 @@ package icu.takeneko.tnca.compat.log;
 
 import com.mojang.logging.LogUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class Slf4jLogServiceImpl implements SimpleLogService {
-    private final Logger logger = LogUtils.getLogger();
+    private static final StackWalker STACK_WALKER = StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE);
+    private final Logger logger = LoggerFactory.getLogger(STACK_WALKER.getCallerClass());
 
     @Override
     public void info(String pattern, Object... args) {
