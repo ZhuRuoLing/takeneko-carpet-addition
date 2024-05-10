@@ -11,17 +11,17 @@ public class Log4j2LogServiceImpl implements SimpleLogService {
 
     @Override
     public void info(String pattern, Object... args) {
-
+        logger.info(pattern, args);
     }
 
     @Override
     public void warn(String pattern, Object... args) {
-
+        logger.warn(pattern, args);
     }
 
     @Override
     public void error(String pattern, Object... args) {
-
+        logger.error(pattern, args);
     }
 }
 //#endif

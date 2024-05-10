@@ -3,6 +3,7 @@ package icu.takeneko.tnca.hook;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@SuppressWarnings({"unused"})
 public class MixinHook {
 //    INVOKEINTERFACE java/util/Set.contains (Ljava/lang/Object;)Z (itf)
 //    IFEQ L21
