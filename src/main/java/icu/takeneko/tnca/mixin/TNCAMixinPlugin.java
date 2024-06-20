@@ -18,6 +18,8 @@ public class TNCAMixinPlugin implements IMixinConfigPlugin {
             "WolfEntityMixin_canSpawn",
             "AxolotlEntityMixin_canSpawn");
 
+    private final static List<String> MIXIN_1_21_APPEND = List.of("AmadilloMixin_canSpawn");
+
     @Override
     public void onLoad(String mixinPackage) {
 
@@ -50,7 +52,12 @@ public class TNCAMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public List<String> getMixins() {
+        //#if MC >= 12100
+        //$$return MIXIN_1_21_APPEND;
+        //#else
         return null;
+        //#endif
+
     }
 
     @Override
