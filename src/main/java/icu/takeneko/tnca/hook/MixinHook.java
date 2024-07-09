@@ -1,7 +1,5 @@
 package icu.takeneko.tnca.hook;
 
-import icu.takeneko.tnca.mixin.TNCAMixinPlugin;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,7 +11,12 @@ public class MixinHook {
 //    LINENUMBER 846 L22
 //    GOTO L17
     public final static String INTERNAL_NAME = MixinHook.class.getName().replace(".","/");
-    private final static List<String> MIXIN_1_16_5_IGNORE = TNCAMixinPlugin.MIXIN_1_16_5_IGNORE;
+    private final static List<String> MIXIN_1_16_5_IGNORE = List.of("FrogEntityMixin_canSpawn",
+            "GlowSquidEntityMixin_canSpawn",
+            "GoatEntityMixin_canSpawn",
+            "WaterCreatureEntityMixin_canSpawn",
+            "WolfEntityMixin_canSpawn",
+            "AxolotlEntityMixin_canSpawn");
 
     //for 1.16.5
     public static boolean shouldInitMixin(String mixinClass){
