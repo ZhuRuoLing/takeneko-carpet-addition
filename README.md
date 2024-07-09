@@ -50,3 +50,14 @@ Add jvm arguments `-DdoNotBypassMessageOrderCheck=true` can invalidate this rule
 - Default Value: `false`
 
 - Categories: `TNCA`
+
+### reintruduceCCESuppression
+
+Re-introduce the CCE Suppression (or Shulker Suppression)  
+This rule only appears on Minecraft >= 1.21
+
+- Type: `Boolean`
+
+- Default Value: `false`
+
+- Categories: `TNCA` `reintroduce`
