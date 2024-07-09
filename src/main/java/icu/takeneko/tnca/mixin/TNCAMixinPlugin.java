@@ -11,14 +11,14 @@ import java.util.Set;
 
 public class TNCAMixinPlugin implements IMixinConfigPlugin {
 
-    private final static List<String> MIXIN_1_16_5_IGNORE = List.of("FrogEntityMixin_canSpawn",
+    public final static List<String> MIXIN_1_16_5_IGNORE = List.of("FrogEntityMixin_canSpawn",
             "GlowSquidEntityMixin_canSpawn",
             "GoatEntityMixin_canSpawn",
             "WaterCreatureEntityMixin_canSpawn",
             "WolfEntityMixin_canSpawn",
             "AxolotlEntityMixin_canSpawn");
 
-    private final static List<String> MIXIN_1_21_APPEND = List.of("AmadilloMixin_canSpawn");
+    private final static List<String> MIXIN_1_21_APPEND = List.of("entity.ArmadilloMixin_canSpawn", "ShulkerBoxMixin");
 
     @Override
     public void onLoad(String mixinPackage) {
