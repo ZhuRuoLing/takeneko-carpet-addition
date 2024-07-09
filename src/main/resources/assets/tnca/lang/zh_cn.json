@@ -2,5 +2,6 @@
   "carpet.category.TNCA": "TNCA",
   "carpet.rule.commandKillFakePlayer.desc": "使用正则表达式或者字符串包含规则移除假人",
   "carpet.rule.commandMobSpawn.desc": "修改生物的生成条件",
-  "carpet.rule.bypassMessageOrderCheck.desc": "关闭聊天消息顺序检查（例如投影粘贴被踢出）"
+  "carpet.rule.bypassMessageOrderCheck.desc": "关闭聊天消息顺序检查（例如投影粘贴被踢出）",
+  "carpet.rule.reintruduceCCESuppression": "重新引入潜影盒CCE更新抑制"
 }

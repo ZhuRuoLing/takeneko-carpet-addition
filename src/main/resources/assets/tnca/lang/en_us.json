@@ -2,6 +2,7 @@
   "carpet.category.TNCA": "TNCA",
   "carpet.rule.commandKillFakePlayer.desc": "Use regular expressions or string inclusion rules to remove fake players.",
   "carpet.rule.commandMobSpawn.desc": "Modify the condition whether a mob can spawn",
-  "carpet.rule.bypassMessageOrderCheck.desc": "Bypass order check of chat messages"
+  "carpet.rule.bypassMessageOrderCheck.desc": "Bypass order check of chat messages",
+  "carpet.rule.reintruduceCCESuppression": "Re-introduce CCE Suppression"
 }
 

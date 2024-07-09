@@ -1,5 +1,6 @@
 package icu.takeneko.tnca.mixin;
 
+import icu.takeneko.tnca.settings.CarpetAdditionSetting;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShulkerBoxBlock;
 import net.minecraft.inventory.Inventory;
@@ -15,7 +16,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class ShulkerBoxMixin {
     @Inject(method = "getComparatorOutput", at = @At("HEAD"), cancellable = true)
     void makeShulkerBoxGreatAgain(BlockState state, World world, BlockPos pos, CallbackInfoReturnable<Integer> cir) {
-        cir.setReturnValue(ScreenHandler.calculateComparatorOutput((Inventory) world.getBlockEntity(pos)));
-        cir.cancel();
+        if (CarpetAdditionSetting.reintruduceCCESuppression) {
+            cir.setReturnValue(ScreenHandler.calculateComparatorOutput((Inventory) world.getBlockEntity(pos)));
+            cir.cancel();
+        }
     }
 }

@@ -39,5 +39,9 @@ public class CarpetAdditionSetting {
     //#endif
     //#endif
 
+    //#if MC >=12100
+    //$$ @Rule(categories = {"TNCA","reintroduce"})
+    //$$ public static boolean reintruduceCCESuppression = false;
+    //#endif
 
 }
